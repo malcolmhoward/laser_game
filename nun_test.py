@@ -15,8 +15,9 @@ servo_center = 375
 # Range of the Nunchuk's analog stick
 nun_min = 45
 nun_max = 255
-nun_center = 127
+nun_center = 174
 # Calculate the values for y = mx + b
+# x needs to be swapped for our setup
 xm = bound/(nun_min - nun_max)
 ym = bound/(nun_max - nun_min)
 xb = servo_center - xm * nun_center
