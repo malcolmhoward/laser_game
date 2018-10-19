@@ -13,7 +13,7 @@ nun_max = 255
 nun_center = 127
 # Calculate the values for y = mx + b
 m = bound/(nun_max - nun_min)
-b = servo_center - m * servo_center
+b = servo_center - m * nun_center
 while True:
     x, y = n.joystick()
     # set_pwm requires ints
