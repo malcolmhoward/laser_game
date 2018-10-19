@@ -1,7 +1,9 @@
-from nunchuck import nunchuck
+from gpiozero import LED
 import Adafruit_PCA9685
+from nunchuck import nunchuck
 
 n = nunchuck()
+laser = LED(4)
 pwm = Adafruit_PCA9685.PCA9685()
 pwm.set_pwm_freq(60)
 # How big you want your "box" to be
@@ -21,3 +23,7 @@ while True:
     y_servo = int(m*y + b)
     pwm.set_pwm(0, 0, x_servo)
     pwm.set_pwm(1, 0, y_servo)
+    if n.button_c():
+        laser.on()
+    else:
+        laser.off()
