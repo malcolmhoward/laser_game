@@ -5,8 +5,8 @@ n = nunchuck()
 pwm = Adafruit_PCA9685.PCA9685()
 pwm.set_pwm_freq(60)
 # How big you want your "box" to be
-bound = 500
-servo_center = 1500
+bound = 100
+servo_center = 375
 # Range of the Nunchuk's analog stick
 nun_min = 45
 nun_max = 255
