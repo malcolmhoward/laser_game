@@ -12,7 +12,7 @@
 ## v0.4 26/6/14 - Change method of XOR and add delay parameter - Simon Walters @cymplecy
 ## v0.41 30/3/15 - Adding support for RPI_REVISION 3 - John Lumley @Jelby-John
 
-from smbus import SMBus
+from smbus2 import SMBus
 import RPi.GPIO as rpi
 import time as time
 
