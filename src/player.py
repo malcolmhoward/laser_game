@@ -1,4 +1,4 @@
-from src.nunchuck import nunchuck
+from .nunchuck import nunchuck
 
 
 class Player:

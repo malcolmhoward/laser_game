@@ -1,3 +1,3 @@
-from paths.line import Line
-from src.player import Player
-from src.npc import NPC
+from paths import Line
+from src import Player
+from src import NPC
