@@ -1,5 +1,4 @@
 from math import sin, cos, atan2, fabs
-import matplotlib.pyplot as plt
 
 
 class Line:
@@ -21,17 +20,3 @@ class Line:
             x += self.x_rate
             y += self.y_rate
             yield x, y
-
-
-if __name__ == '__main__':
-    l = Line(20, 100, 0, 0, 12)
-    data = l.data()
-    x = []
-    y = []
-    for d in data:
-        x.append(d[0])
-        y.append(d[1])
-    plt.plot(x, y)
-    plt.xticks([0, 100])
-    plt.yticks([0, 100])
-    plt.show()
