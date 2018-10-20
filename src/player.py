@@ -8,12 +8,14 @@ class Player:
     nun_max = 255
     nun_center = 174
 
-    def __init__(self, bound, servo_center, pwm, x_channel, y_channel):
+    def __init__(self, bound, servo_center, pwm, x_channel, y_channel, no_x=False, no_y=False):
         self.bound = bound
         self.servo_center = servo_center
         self.pwm = pwm
         self.x_channel = x_channel
         self.y_channel = y_channel
+        self.no_x = no_x
+        self.no_y = no_y
         # Calculate the values for y = mx + b
         # x needs to be swapped for our setup
         self.xm = self.bound / (self.nun_min - self.nun_max)
@@ -29,5 +31,7 @@ class Player:
         x, y = self.n.joystick()
         x_servo = self.xm * x + self.xb
         y_servo = self.ym * y + self.yb
-        self.pwm.set_pwm(self.x_channel, 0, x_servo)
-        self.pwm.set_pwm(self.y_channel, 0, y_servo)
+        if not self.no_x:
+            self.pwm.set_pwm(self.x_channel, 0, x_servo)
+        if not self.no_y:
+            self.pwm.set_pwm(self.y_channel, 0, y_servo)
