@@ -51,8 +51,17 @@ class MissileDefense:
                             hit = True
 
     def make_missile(self):
-        x_start = random.randint(self.center - self.bound/2, self.center + self.bound/2)
-        x_end = random.randint(self.center - self.bound/2, self.center + self.bound/2)
-        missile = Line(x_start, self.center - self.bound/2, x_end, self.center + self.bound/2, 1)
+        x_start = random.randint(self.center - self.bound/2,
+                                 self.center + self.bound/2)
+        x_end = random.randint(self.center - self.bound/2,
+                               self.center + self.bound/2)
+        missile = Line(x_start, self.center - self.bound/2,
+                       x_end, self.center + self.bound/2, 1)
         return missile.data()
 
+
+if __name__ == '__main__':
+    import Adafruit_PCA9685
+    pwm = Adafruit_PCA9685.Adafruit_PCA9685()
+    pwm.set_pwm_freq(60)
+    m = MissileDefense(pwm, 375, 100)
