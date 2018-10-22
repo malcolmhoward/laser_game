@@ -50,9 +50,9 @@ class MissileDefense:
                             hit = True
 
     def make_missile(self):
-        x_low = int(self.center - self.bound / 2)
-        x_high = int(self.center + self.bound/2)
-        x_start = random.randint(x_low, x_high)
-        x_end = random.randint(x_low, x_high)
-        missile = Line(x_start, x_low, x_end, x_high, 1)
+        y_low = int(self.center + self.bound / 2)
+        y_high = int(self.center - self.bound/2)
+        x_start = random.randint(y_high, y_low)
+        x_end = random.randint(y_high, y_low)
+        missile = Line(x_start, y_low, x_end, y_high, 1)
         return missile.data()
