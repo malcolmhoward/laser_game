@@ -1,6 +1,5 @@
 import time
 import random
-from Adafruit_Python_PCA9685.Adafruit_PCA9685 import PCA9685
 from paths import Line
 from src import Player
 from src import NPC
@@ -11,7 +10,7 @@ class MissileDefense:
     time_rate = 1/60
     bomb_radius = 10
 
-    def __init__(self, pwm: PCA9685, bound, center):
+    def __init__(self, pwm, bound, center):
         self.bound = bound
         self.center = center
         self.player = Player(bound, center, pwm, 0, 1)
@@ -51,17 +50,9 @@ class MissileDefense:
                             hit = True
 
     def make_missile(self):
-        x_start = random.randint(self.center - self.bound/2,
-                                 self.center + self.bound/2)
-        x_end = random.randint(self.center - self.bound/2,
-                               self.center + self.bound/2)
-        missile = Line(x_start, self.center - self.bound/2,
-                       x_end, self.center + self.bound/2, 1)
+        x_low = int(self.center - self.bound / 2)
+        x_high = int(self.center + self.bound/2)
+        x_start = random.randint(x_low, x_high)
+        x_end = random.randint(x_low, x_high)
+        missile = Line(x_start, x_low, x_end, x_high, 1)
         return missile.data()
-
-
-if __name__ == '__main__':
-    import Adafruit_PCA9685
-    pwm = Adafruit_PCA9685.Adafruit_PCA9685()
-    pwm.set_pwm_freq(60)
-    m = MissileDefense(pwm, 375, 100)
