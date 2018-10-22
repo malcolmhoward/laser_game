@@ -1,5 +1,4 @@
 from .nunchuck import nunchuck
-from Adafruit_Python_PCA9685.Adafruit_PCA9685 import PCA9685
 
 
 class Player:
@@ -9,7 +8,7 @@ class Player:
     nun_max = 255
     nun_center = 174
 
-    def __init__(self, bound: int, servo_center: int, pwm: PCA9685,
+    def __init__(self, bound: int, servo_center: int, pwm,
                  x_channel: int, y_channel: int, no_x: bool=False, no_y: bool=False):
         self.bound = bound
         self.servo_center = servo_center
