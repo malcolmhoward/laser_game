@@ -3,6 +3,7 @@ import random
 from paths import Line
 from src import Player, NPC
 from src.TURRETS import TURRET_1, TURRET_2
+from src.NUNCHUKS import NUNCHUK_1
 
 
 class MissileDefense:
@@ -13,7 +14,7 @@ class MissileDefense:
     def __init__(self, pwm, bound, center):
         self.bound = bound
         self.center = center
-        self.player = Player(bound, pwm, TURRET_1)
+        self.player = Player(bound, bound, pwm, TURRET_1, NUNCHUK_1)
         self.missile = NPC(pwm, TURRET_2)
         self.playing = False
 
