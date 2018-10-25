@@ -1,8 +1,8 @@
 import time
 import random
 from paths import Line
-from src import Player
-from src import NPC
+from src import Player, NPC
+from src.TURRETS import TURRET_1, TURRET_2
 
 
 class MissileDefense:
@@ -13,8 +13,8 @@ class MissileDefense:
     def __init__(self, pwm, bound, center):
         self.bound = bound
         self.center = center
-        self.player = Player(bound, center, pwm, 0, 1)
-        self.missile = NPC(pwm, 2, 3)
+        self.player = Player(bound, pwm, TURRET_1)
+        self.missile = NPC(pwm, TURRET_2)
         self.playing = False
 
     def play_on(self):
