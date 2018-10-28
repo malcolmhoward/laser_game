@@ -2,7 +2,10 @@
 # data http://wiibrew.org/wiki/Wiimote/Extension_Controllers/Classic_Controller
 # C++ code https://github.com/dmadison/WiiChuck/tree/master/src
 
-from smbus2 import SMBus
+try:
+    from smbus import SMBus
+except ImportError:
+    from smbus2 import SMBus
 import RPi.GPIO as rpi
 import time as time
 
