@@ -6,8 +6,8 @@ Byte |    7    | 6   |	5  | 4  | 3  |	2  | 1   |	0  |
 1    |    RX<2:1>    |             LY<5:0>             |
 2    |  RX<0>  |  LT<4:3>  |          RY<4:0>          |
 3    |       LT<2:0>       |          RT<4:0>          |
-4    |   R   | D | LT | - | HOME | + | RT | U |
-5    |   ZL  | B | Y | A | X | ZR | L |  |
+4    |   R   | D | LT | - | HOME | +  | RT |   |
+5    |   ZL  | B | Y  | A | X    | ZR | L  | U |
 """
 
 """
@@ -16,7 +16,7 @@ b = 6, 191: 6
 x = 6, 247: 3
 y = 6, 223: 5
 d = 5, 191: 6
-u = 5, 254: 0
+u = 6, 254: 0
 l = 6, 253: 1
 r = 5, 127: 7
 - = 5, 239: 4
@@ -104,6 +104,10 @@ class ProController:
         data = self.read()
         return data[5] & 0x02 == 0
 
+    def button_up(self):
+        data = self.read()
+        return data[5] & 0x01 == 0
+
     """
     BYTE 4
     """
@@ -134,7 +138,3 @@ class ProController:
     def button_trigger_right(self):
         data = self.read()
         return data[4] & 0x02 == 0
-
-    def button_up(self):
-        data = self.read()
-        return data[4] & 0x01 == 0
