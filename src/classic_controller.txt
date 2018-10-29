@@ -1,8 +1,0 @@
- 	   Bit
-Byte |    7    | 6   |	5  | 4  | 3  |	2  | 1   |	0  |
-0    |    RX<4:3>    |             LX<5:0>             |
-1    |    RX<2:1>    |             LY<5:0>             |
-2    |  RX<0>  |  LT<4:3>  |          RY<4:0>          |
-3    |       LT<2:0>       |          RT<4:0>          |
-4    |   BDR   | BDD | BLT | B- | BH | B+  | BRT |     |
-5    |   BZL   | BB  | BY  | BA | BX | BZR | BDL | BDU |

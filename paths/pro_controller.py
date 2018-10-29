@@ -1,7 +1,3 @@
-# links:
-# data http://wiibrew.org/wiki/Wiimote/Extension_Controllers/Classic_Controller
-# C++ code https://github.com/dmadison/WiiChuck/tree/master/src
-
 """
 DATA
       Bit
@@ -10,10 +6,27 @@ Byte |    7    | 6   |	5  | 4  | 3  |	2  | 1   |	0  |
 1    |    RX<2:1>    |             LY<5:0>             |
 2    |  RX<0>  |  LT<4:3>  |          RY<4:0>          |
 3    |       LT<2:0>       |          RT<4:0>          |
-4    |   R     |  D  | LT  | -  | H  |  +  | RT  |     |
-5    |   ZL    |  B  |  Y  |  A |  X |  ZR |  L  |  U  |
+4    |   R   | D | LT | - | HOME | + | RT | U |
+5    |   ZL  | B | Y | A | X | ZR | L |  |
 """
 
+"""
+a = 6, 239: 4
+b = 6, 191: 6
+x = 6, 247: 3
+y = 6, 223: 5
+d = 5, 191: 6
+u = 5, 254: 0
+l = 6, 253: 1
+r = 5, 127: 7
+- = 5, 239: 4
++ = 5, 251: 2
+home = 5, 247: 3
+lt = 5, 223: 5
+rt = 4, 31, also 5, 253: 1
+zl = 6, 127: 7
+zr = 6, 251: 2
+"""
 
 try:
     from smbus import SMBus
@@ -23,7 +36,7 @@ import RPi.GPIO as rpi
 import time as time
 
 
-class ClassicController:
+class ProController:
 
     def __init__(self, delay=0.05):
         self.delay = delay
@@ -60,16 +73,6 @@ class ClassicController:
         bit_34 = (data[0] & 0xC0) >> 3
         return bit_0 + bit_12 + bit_34, data[2] & 0x1F
 
-    def left_trigger_pressure(self):
-        data = self.read()
-        bit_02 = (data[3] & 0xE0) >> 5
-        bit_34 = (data[3] & 0x60) >> 2
-        return bit_02 + bit_34
-
-    def right_trigger_pressure(self):
-        data = self.read()
-        return data[3] & 0x1F
-
     """
     BYTE 5
     """
@@ -101,10 +104,6 @@ class ClassicController:
         data = self.read()
         return data[5] & 0x02 == 0
 
-    def button_up(self):
-        data = self.read()
-        return data[5] & 0x01 == 0
-
     """
     BYTE 4
     """
@@ -135,3 +134,7 @@ class ClassicController:
     def button_trigger_right(self):
         data = self.read()
         return data[4] & 0x02 == 0
+
+    def button_up(self):
+        data = self.read()
+        return data[4] & 0x01 == 0
