@@ -35,9 +35,12 @@ class ClassicController:
 
     def left_joystick(self):
         data = self.read()
+        return data[0] & 0x3F, data[1] & 0x3F
 
     def right_joystick(self):
         data = self.read()
+        return data[2] & 0x80 + data[1] & 0xC0 + data[0] & 0xC0, \
+            data[2] & 0x1F
 
     def left_trigger_pressure(self):
         data = self.read()
@@ -45,62 +48,64 @@ class ClassicController:
     def right_trigger_pressure(self):
         data = self.read()
 
-    def button_a(self):
+    # Byte 5
+    def button_zl(self):
         data = self.read()
-        return data[5] & 0x00
+        return data[5] & 0x80 == 0
 
     def button_b(self):
         data = self.read()
-        return data[5] & 0x00
-
-    def button_x(self):
-        data = self.read()
-        return data[5] & 0x00
+        return data[5] & 0x40 == 0
 
     def button_y(self):
         data = self.read()
-        return data[5] & 0x00
+        return data[5] & 0x20 == 0
 
-    def button_home(self):
+    def button_a(self):
         data = self.read()
-        return data[5] & 0x00
+        return data[5] & 0x10 == 0
 
-    def button_minus(self):
+    def button_x(self):
         data = self.read()
-        return data[5] & 0x00
-
-    def button_plus(self):
-        data = self.read()
-        return data[5] & 0x00
-
-    def button_zl(self):
-        data = self.read()
-        return data[5] & 0x07
+        return data[5] & 0x08 == 0
 
     def button_zr(self):
         data = self.read()
-        return data[5] & 0x00
-
-    def button_trigger_left(self):
-        data = self.read()
-        return data[5] & 0x00
-
-    def button_trigger_right(self):
-        data = self.read()
-        return data[5] & 0x00
-
-    def button_up(self):
-        data = self.read()
-        return data[5] & 0x00
-
-    def button_down(self):
-        data = self.read()
-        return data[5] & 0x00
+        return data[5] & 0x04 == 0
 
     def button_left(self):
         data = self.read()
-        return data[5] & 0x00
+        return data[5] & 0x02 == 0
 
+    def button_up(self):
+        data = self.read()
+        return data[5] & 0x01 == 0
+
+    # Byte 4
     def button_right(self):
         data = self.read()
-        return data[5] & 0x00
+        return data[4] & 0x80 == 0
+
+    def button_down(self):
+        data = self.read()
+        return data[4] & 0x40 == 0
+
+    def button_trigger_left(self):
+        data = self.read()
+        return data[4] & 0x20 == 0
+
+    def button_minus(self):
+        data = self.read()
+        return data[4] & 0x10 == 0
+
+    def button_home(self):
+        data = self.read()
+        return data[4] & 0x08 == 0
+
+    def button_plus(self):
+        data = self.read()
+        return data[4] & 0x04 == 0
+
+    def button_trigger_right(self):
+        data = self.read()
+        return data[4] & 0x02 == 0
