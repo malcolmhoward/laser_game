@@ -33,22 +33,33 @@ class ClassicController:
         temp = [(0x17 + (0x17 ^ self.bus.read_byte(0x52))) for _ in range(6)]
         return temp
 
+    """
+    ANALOGS
+    """
     def left_joystick(self):
         data = self.read()
         return data[0] & 0x3F, data[1] & 0x3F
 
     def right_joystick(self):
         data = self.read()
-        return data[2] & 0x80 + data[1] & 0xC0 + data[0] & 0xC0, \
-            data[2] & 0x1F
+        bit_0 = (data[2] & 0x80) >> 7
+        bit_12 = (data[1] & 0xC0) >> 5
+        bit_34 = (data[0] & 0xC0) >> 3
+        return bit_0 + bit_12 + bit_34, data[2] & 0x1F
 
     def left_trigger_pressure(self):
         data = self.read()
+        bit_02 = (data[3] & 0xE0) >> 5
+        bit_34 = (data[3] & 0x60) >> 2
+        return bit_02 + bit_34
 
     def right_trigger_pressure(self):
         data = self.read()
+        return data[3] & 0x1F
 
-    # Byte 5
+    """
+    BYTE 5
+    """
     def button_zl(self):
         data = self.read()
         return data[5] & 0x80 == 0
@@ -81,7 +92,9 @@ class ClassicController:
         data = self.read()
         return data[5] & 0x01 == 0
 
-    # Byte 4
+    """
+    BYTE 4
+    """
     def button_right(self):
         data = self.read()
         return data[4] & 0x80 == 0
