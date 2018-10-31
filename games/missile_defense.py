@@ -2,8 +2,8 @@ import time
 import random
 from paths import Line
 from src import Player, NPC
-from src.TURRETS import TURRET_1, TURRET_2
-from src.NUNCHUKS import NUNCHUK_1
+from src.player_controller import PlayerController
+from src.turret import Turret
 
 
 class MissileDefense:
@@ -11,11 +11,15 @@ class MissileDefense:
     time_rate = 1/60
     bomb_radius = 10
 
-    def __init__(self, pwm, bound, center):
+    def __init__(self, pwm,
+                 controller: PlayerController,
+                 player_turret: Turret,
+                 missile_turret: Turret,
+                 bound, center):
         self.bound = bound
         self.center = center
-        self.player = Player(bound, bound, pwm, TURRET_1, NUNCHUK_1)
-        self.missile = NPC(pwm, TURRET_2)
+        self.player = Player(bound, bound, pwm, player_turret, controller)
+        self.missile = NPC(pwm, missile_turret)
         self.playing = False
 
     def play_on(self):
