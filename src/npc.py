@@ -14,7 +14,16 @@ class NPC:
         self.pwm.set_pwm(self.y_pin, 0, y + self.turret.y_offset)
 
     def follow_path(self, path_generator):
-        for x, y in path_generator:
+        """
+        Wraps a generator/coroutine and sets the servo to the x/y value received.
+
+        :param path_generator:
+        :return:
+        """
+        x, y = path_generator.__next__()
+        gen_arg = yield x, y
+        while True:
+            # Send the arg (if any) to the generator
+            x, y = path_generator.send(gen_arg)
             self.set_servo(x + self.turret.x_offset, y + self.turret.y_offset)
-            yield x, y
-        return
+            gen_arg = yield x, y
