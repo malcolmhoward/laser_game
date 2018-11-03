@@ -21,4 +21,3 @@ class Line:
             x += self.x_rate
             y += self.y_rate
             yield int(x), int(y)
-        return
