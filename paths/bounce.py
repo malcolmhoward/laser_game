@@ -28,6 +28,7 @@ class Bounce:
             # Get whether the object has collided with a wall
             horizontal_hit, vertical_hit = yield int(x), int(y)
             # Simply reverse the x/y rate depending on the wall type
+            # TODO: could add a little variance in the angle with every bounce
             if horizontal_hit:
                 self.y_rate *= -1
             if vertical_hit:
