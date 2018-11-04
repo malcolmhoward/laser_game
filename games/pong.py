@@ -10,8 +10,9 @@ class Pong:
     paddle_length = 10
     x_hit = 2
 
-    def __init__(self, bound, pwm, player_1_controller, player_2_controller,
+    def __init__(self, center, bound, pwm, player_1_controller, player_2_controller,
                  player_1_turret, player_2_turret, npc_turret):
+        self.center = center
         self.bound = bound
         self.player_1 = Player(bound, bound, pwm,
                                player_1_turret, player_1_controller, no_x=True)
@@ -32,19 +33,22 @@ class Pong:
                 prev_time = curr_time
                 xp_1, yp_1 = self.player_1.get_position()
                 xp_2, yp_2 = self.player_2.get_position()
+                xp_1_hit = fabs(xp_1 - xs) <= self.x_hit
+                xp_2_hit = fabs(xp_2 - xs) <= self.x_hit
+                yp_1_hit = fabs(yp_1 - ys) <= self.paddle_length
+                yp_2_hit = fabs(yp_2 - ys) <= self.paddle_length
                 # Player 1 or 2 lose
-                if fabs(ys - yp_1) > self.paddle_length and fabs(xp_1 - xs) < self.x_hit:
+                if not yp_1_hit and xp_1_hit:
                     pass
-                elif fabs(ys - yp_2) > self.paddle_length and fabs(xp_2 - xs) < self.x_hit:
+                elif not yp_1_hit and xp_2_hit:
                     pass
                 else:
                     # Player 1 or 2 hit
-                    if (fabs(ys - yp_1) < self.paddle_length and fabs(xp_1 - xs) < self.x_hit) \
-                            or (fabs(ys - yp_2) < self.paddle_length and fabs(xp_2 - xs) < self.x_hit):
+                    if (yp_1_hit and xp_1_hit) or (yp_2_hit and xp_2_hit):
                         vertical_hit = True
                         horizontal_hit = False
                     # Top or bottom wall hit
-                    elif ys > self.bound or ys < self.bound:
+                    elif ys >= (self.center + self.bound/2) or ys <= (self.center - self.bound/2):
                         horizontal_hit = True
                         vertical_hit = False
                     else:
