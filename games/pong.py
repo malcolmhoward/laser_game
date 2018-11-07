@@ -42,6 +42,8 @@ class Pong:
                     self.player_1.set_servo()
                     self.player_2.set_servo()
                     xp_1, yp_1 = self.player_1.get_position()
+                    print('player pos: ', xp_1, yp_1)
+                    print('ball pos: ', xs, ys)
                     xp_2, yp_2 = self.player_2.get_position()
                     xp_1_hit = fabs(xp_1 - xs) <= self.x_hit
                     xp_2_hit = fabs(xp_2 - xs) <= self.x_hit
