@@ -11,7 +11,7 @@ class Bounce:
         self.x_rate = rate * cos(self.angle_rad)
         self.y_rate = rate * sin(self.angle_rad)
 
-    def data(self) -> Generator[int, int]:
+    def data(self) -> Generator[int, int, None]:
         """
         Coroutine to advance an object at a certain rate until colliding with a wall.
 
