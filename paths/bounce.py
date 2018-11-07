@@ -1,5 +1,5 @@
 from math import sin, cos
-from typing import Generator
+from typing import Generator, Tuple
 
 
 class Bounce:
@@ -11,7 +11,7 @@ class Bounce:
         self.x_rate = rate * cos(self.angle_rad)
         self.y_rate = rate * sin(self.angle_rad)
 
-    def data(self) -> Generator[int, int, None]:
+    def data(self) -> Generator[Tuple[int, int], Tuple[bool, bool], None]:
         """
         Coroutine to advance an object at a certain rate until colliding with a wall.
 
