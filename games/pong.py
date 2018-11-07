@@ -44,11 +44,14 @@ class Pong:
                 xp_2_hit = fabs(xp_2 - xs) <= self.x_hit
                 yp_1_hit = fabs(yp_1 - ys) <= self.paddle_length
                 yp_2_hit = fabs(yp_2 - ys) <= self.paddle_length
+                horizontal_hit = False
                 # Player 1 or 2 lose
                 if not yp_1_hit and xp_1_hit:
-                    pass
+                    print('Player 1 loses but continuing for now')
+                    vertical_hit = True
                 elif not yp_1_hit and xp_2_hit:
-                    pass
+                    print('Player 2 loses but continuing for now')
+                    vertical_hit = True
                 else:
                     # Player 1 or 2 hit
                     if (yp_1_hit and xp_1_hit) or (yp_2_hit and xp_2_hit):
@@ -61,4 +64,4 @@ class Pong:
                     else:
                         horizontal_hit = False
                         vertical_hit = False
-                    xs, ys = ball_servo.send((horizontal_hit, vertical_hit))
+                xs, ys = ball_servo.send((horizontal_hit, vertical_hit))
