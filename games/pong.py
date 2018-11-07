@@ -25,6 +25,9 @@ class Pong:
 
     def play_on(self):
         self.playing = True
+        self.ball.laser.on()
+        self.player_1.laser.on()
+        self.player_2.laser.on()
         bounce = Bounce(self.center, self.center, 1.5707, 2)
         ball_servo = self.ball.follow_path(bounce.data())
         prev_time = 0

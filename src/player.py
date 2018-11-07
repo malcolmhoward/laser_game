@@ -1,3 +1,4 @@
+from gpiozero import LED
 from .turret import Turret
 from .player_controller import PlayerController
 
@@ -13,6 +14,7 @@ class Player:
                  fixed_x: int=0, fixed_y: int=0):
         self.controller = controller
         self.turret = turret
+        self.laser = LED(turret.laser_pin)
         self.pwm = pwm
         self.x_pin = turret.x_pin
         self.y_pin = turret.y_pin

@@ -1,4 +1,5 @@
 from typing import Generator, Tuple
+from gpiozero import LED
 from .turret import Turret
 
 
@@ -9,6 +10,7 @@ class NPC:
         self.turret = turret
         self.x_pin = turret.x_pin
         self.y_pin = turret.y_pin
+        self.laser = LED(turret.laser_pin)
 
     def set_servo(self, x: int, y: int):
         self.pwm.set_pwm(self.x_pin, 0, x + self.turret.x_cal)
