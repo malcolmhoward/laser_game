@@ -35,6 +35,9 @@ class PlayerNunchuk(PlayerController):
     def joystick(self):
         return self.n.joystick()
 
+    def fire(self):
+        return self.n.button_z()
+
 
 class PlayerLeftPro(PlayerController):
     def __init__(self, x_center, y_center, x_min, x_max, y_min, y_max):
