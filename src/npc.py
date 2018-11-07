@@ -10,11 +10,11 @@ class NPC:
         self.y_pin = turret.y_pin
 
     def set_servo(self, x: int, y: int):
-        self.pwm.set_pwm(self.x_pin, 0, x + self.turret.x_offset)
-        self.pwm.set_pwm(self.y_pin, 0, y + self.turret.y_offset)
+        self.pwm.set_pwm(self.x_pin, 0, x + self.turret.x_cal)
+        self.pwm.set_pwm(self.y_pin, 0, y + self.turret.y_cal)
 
     def follow_path(self, path_generator):
         for x, y in path_generator:
-            self.set_servo(x + self.turret.x_offset, y + self.turret.y_offset)
+            self.set_servo(x + self.turret.x_cal, y + self.turret.y_cal)
             yield x, y
         return
