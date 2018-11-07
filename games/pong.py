@@ -26,7 +26,7 @@ class Pong:
     def play_on(self):
         self.playing = True
         bounce = Bounce(self.center, self.center, 1.5707, 2)
-        ball_servo = self.ball.follow_path(bounce)
+        ball_servo = self.ball.follow_path(bounce.data())
         prev_time = 0
         xs, ys = ball_servo.__next__()
         while self.playing:

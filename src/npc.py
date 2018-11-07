@@ -1,3 +1,4 @@
+from typing import Generator
 from .turret import Turret
 
 
@@ -13,7 +14,7 @@ class NPC:
         self.pwm.set_pwm(self.x_pin, 0, x + self.turret.x_cal)
         self.pwm.set_pwm(self.y_pin, 0, y + self.turret.y_cal)
 
-    def follow_path(self, path_generator):
+    def follow_path(self, path_generator: Generator[int, int]):
         """
         Wraps a generator/coroutine and sets the servo to the x/y value received.
 
