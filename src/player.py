@@ -24,28 +24,32 @@ class Player:
         self.no_y = no_y
         self.fixed_x = fixed_x
         if fixed_x:
+            self.servo_x = fixed_x
             pwm.set_pwm(self.x_pin, 0, fixed_x)
+        else:
+            self.servo_x = -1
         self.fixed_y = fixed_y
         if fixed_y:
+            self.servo_y = fixed_y
             pwm.set_pwm(self.x_pin, 0, fixed_y)
+        else:
+            self.servo_y = -1
         # Calculate the values for y = mx + b
         # x needs to be swapped for our setup
         self.xm = x_bound / (controller.x_min - controller.x_max)
         self.ym = y_bound / (controller.y_max - controller.y_min)
         self.xb = turret.x_center - self.xm * controller.x_center
         self.yb = turret.y_center - self.ym * controller.y_center
-        self.servo_x = -1
-        self.servo_y = -1
 
     def set_servo(self):
         x, y = self.controller.joystick()
-        self.servo_x = int(self.xm * x + self.xb)
-        self.servo_y = int(self.ym * y + self.yb)
         if not self.no_x:
+            self.servo_x = int(self.xm * x + self.xb)
             self.pwm.set_pwm(self.x_pin, 0, self.servo_x
                                             + self.turret.x_cal
                                             + self.x_offset)
         if not self.no_y:
+            self.servo_y = int(self.ym * y + self.yb)
             self.pwm.set_pwm(self.y_pin, 0, self.servo_y
                                             + self.turret.y_cal
                                             + self.y_offset)
