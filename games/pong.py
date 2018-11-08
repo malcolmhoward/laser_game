@@ -42,9 +42,10 @@ class Pong:
                     self.player_1.set_servo()
                     self.player_2.set_servo()
                     xp_1, yp_1 = self.player_1.get_position()
-                    print('player pos: ', xp_1, yp_1)
-                    print('ball pos: ', xs, ys)
                     xp_2, yp_2 = self.player_2.get_position()
+                    print('player 1 pos: ', xp_1, yp_1)
+                    print('player 2 pos: ', xp_2, yp_2)
+                    print('ball pos: ', xs, ys)
                     xp_1_hit = fabs(xp_1 - xs) <= self.x_hit
                     xp_2_hit = fabs(xp_2 - xs) <= self.x_hit
                     yp_1_hit = fabs(yp_1 - ys) <= self.paddle_length
@@ -54,7 +55,7 @@ class Pong:
                         print('Player 1 loses!')
                         player_2_points += 1
                         break
-                    elif not yp_1_hit and xp_2_hit:
+                    elif not yp_2_hit and xp_2_hit:
                         print('Player 2 loses!')
                         player_1_points += 1
                         break
