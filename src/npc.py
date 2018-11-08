@@ -28,5 +28,5 @@ class NPC:
         while True:
             # Send the arg (if any) to the generator
             x, y = path_generator.send(gen_arg)
-            self.set_servo(x + self.turret.x_cal, y + self.turret.y_cal)
+            self.set_servo(x, y)
             gen_arg = yield x, y
