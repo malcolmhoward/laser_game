@@ -25,13 +25,13 @@ class Player:
         self.fixed_x = fixed_x
         if fixed_x:
             self.servo_x = fixed_x
-            pwm.set_pwm(self.x_pin, 0, fixed_x)
+            pwm.set_pwm(self.x_pin, 0, fixed_x + turret.x_cal)
         else:
             self.servo_x = -1
         self.fixed_y = fixed_y
         if fixed_y:
             self.servo_y = fixed_y
-            pwm.set_pwm(self.x_pin, 0, fixed_y)
+            pwm.set_pwm(self.x_pin, 0, fixed_y + turret.y_cal)
         else:
             self.servo_y = -1
         # Calculate the values for y = mx + b
