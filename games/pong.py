@@ -16,10 +16,10 @@ class Pong:
         self.bound = bound
         self.player_1 = Player(bound, bound, pwm,
                                player_1_turret, player_1_controller,
-                               no_x=True, fixed_x=int(center - bound/2))
+                               no_x=True, fixed_x=int(center + bound/2))
         self.player_2 = Player(bound, bound, pwm,
                                player_2_turret, player_2_controller,
-                               no_x=True, fixed_x=int(center + bound/2))
+                               no_x=True, fixed_x=int(center - bound/2))
         self.ball = NPC(pwm, npc_turret)
         self.playing = False
 
