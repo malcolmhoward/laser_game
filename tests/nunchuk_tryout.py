@@ -1,7 +1,7 @@
 import time
-from src import nunchuck
+from src import Nunchuk
 
-n = nunchuck()
+n = Nunchuk()
 
 while True:
     if n.button_c():

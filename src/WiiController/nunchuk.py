@@ -12,35 +12,12 @@
 ## v0.4 26/6/14 - Change method of XOR and add delay parameter - Simon Walters @cymplecy
 ## v0.41 30/3/15 - Adding support for RPI_REVISION 3 - John Lumley @Jelby-John
 
-from smbus2 import SMBus
-import RPi.GPIO as rpi
-import time as time
+from .wii_controller import WiiController
 
-bus = 0
-
-
-class nunchuck:
+class Nunchuk(WiiController):
 
     def __init__(self, delay=0.05):
-        self.delay = delay
-        if rpi.RPI_REVISION == 1:
-            i2c_bus = 0
-        elif rpi.RPI_REVISION == 2:
-            i2c_bus = 1
-        elif rpi.RPI_REVISION == 3:
-            i2c_bus = 1
-        else:
-            print("Unable to determine Raspberry Pi revision.")
-            exit()
-        self.bus = SMBus(i2c_bus)
-        self.bus.write_byte_data(0x52, 0x40, 0x00)
-        time.sleep(0.1)
-
-    def read(self):
-        self.bus.write_byte(0x52, 0x00)
-        time.sleep(self.delay)
-        temp = [(0x17 + (0x17 ^ self.bus.read_byte(0x52))) % 256 for i in range(6)]
-        return temp
+        super().__init__(delay)
 
     def raw(self):
         data = self.read()
@@ -86,8 +63,9 @@ class nunchuck:
         data = self.read()
         return data[4]
 
-    def setdelay(self, delay):
+    def set_delay(self, delay):
         self.delay = delay
 
-    def scale(self, value, _min, _max, _omin, _omax):
+    @staticmethod
+    def scale(value, _min, _max, _omin, _omax):
         return (value - _min) * (_omax - _omin) // (_max - _min) + _omin
