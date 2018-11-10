@@ -52,7 +52,11 @@ class MissileDefense:
                     lose = True
                 else:
                     if self.player.firing():
-                        dist_2_bomb = (m_y - p_y)/(m_x - p_x)
+                        try:
+                            dist_2_bomb = (m_y - p_y)/(m_x - p_x)
+                        # If the x's are equal
+                        except ZeroDivisionError:
+                            dist_2_bomb = m_y - p_y
                         if dist_2_bomb <= self.bomb_radius:
                             hit = True
 
