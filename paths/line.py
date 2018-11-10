@@ -1,5 +1,5 @@
 from math import sin, cos, atan2, fabs
-from typing import Tuple
+from typing import Generator, Tuple
 
 
 class Line:
@@ -13,7 +13,7 @@ class Line:
         self.x_rate = rate * cos(self.angle)
         self.y_rate = rate * sin(self.angle)
 
-    def data(self) -> Tuple[int, int]:
+    def data(self) -> Generator[Tuple[int, int], None, None]:
         x = self.x_start
         y = self.y_start
         yield x, y
