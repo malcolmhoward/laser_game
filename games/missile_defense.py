@@ -29,16 +29,18 @@ class MissileDefense(Game):
         prev_time = 0
         player_score = 0
         homes_destroyed = 0
+        missile_rate = 1
         missile = self.missile.follow_path(self.make_missile())
         while self.playing:
             if hit:
                 player_score += 1
+                missile_rate += 1
             if lose:
                 homes_destroyed += 1
             if hit or lose:
                 hit = False
                 lose = False
-                missile = self.missile.follow_path(self.make_missile())
+                missile = self.missile.follow_path(self.make_missile(missile_rate))
             curr_time = time.time()
             if curr_time - prev_time >= self.time_rate:
                 prev_time = curr_time
@@ -57,10 +59,10 @@ class MissileDefense(Game):
                         if dist_2_bomb <= self.bomb_radius:
                             hit = True
 
-    def make_missile(self) -> Generator:
+    def make_missile(self, rate=1) -> Generator:
         y_low = int(self.center + self.bound / 2)
         y_high = int(self.center - self.bound/2)
         x_start = random.randint(y_high, y_low)
         x_end = random.randint(y_high, y_low)
-        missile = Line(x_start, y_low, x_end, y_high, 1)
+        missile = Line(x_start, y_low, x_end, y_high, rate)
         return missile.data()
