@@ -1,19 +1,18 @@
 import time
 from math import fabs
+from .game import Game
 from src import Player, NPC
 from paths import Bounce
 
 
-class Pong:
+class Pong(Game):
 
-    time_rate = 1 / 60
     paddle_length = 10
     x_hit = 2
 
     def __init__(self, center, bound, pwm, player_1_controller, player_2_controller,
                  player_1_turret, player_2_turret, npc_turret):
-        self.center = center
-        self.bound = bound
+        super().__init__(center, bound, pwm)
         self.player_1 = Player(bound, bound, pwm,
                                player_1_turret, player_1_controller,
                                no_x=True, fixed_x=int(center + bound/2))
@@ -21,7 +20,6 @@ class Pong:
                                player_2_turret, player_2_controller,
                                no_x=True, fixed_x=int(center - bound/2))
         self.ball = NPC(pwm, npc_turret)
-        self.playing = False
 
     def play_on(self):
         player_1_points = 0

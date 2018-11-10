@@ -3,27 +3,24 @@ import random
 from typing import Generator
 from paths import Line
 from src import Player, NPC
+from .game import Game
 from src.player_controller import PlayerController
 from src.turret import Turret
 
 
-class MissileDefense:
+class MissileDefense(Game):
 
-    time_rate = 1/60
     bomb_radius = 10
 
-    def __init__(self, pwm,
+    def __init__(self, center, bound, pwm,
                  controller: PlayerController,
                  player_turret: Turret,
-                 missile_turret: Turret,
-                 bound, center):
-        self.bound = bound
-        self.center = center
+                 missile_turret: Turret):
+        super().__init__(center, bound, pwm)
         self.player = Player(bound, bound, pwm, player_turret, controller)
         self.player.laser.on()
         self.missile = NPC(pwm, missile_turret)
         self.missile.laser.on()
-        self.playing = False
 
     def play_on(self):
         self.playing = True
