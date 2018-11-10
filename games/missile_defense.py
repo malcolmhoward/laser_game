@@ -45,15 +45,14 @@ class MissileDefense:
             curr_time = time.time()
             if curr_time - prev_time >= self.time_rate:
                 prev_time = curr_time
-                self.player.set_servo()
+                p_x, p_y = self.player.set_servo()
                 try:
                     m_x, m_y = missile.__next__()
                 except StopIteration:
                     lose = True
                 else:
-                    player_x, player_y = self.player.get_position()
                     if self.player.firing():
-                        dist_2_bomb = (m_y - player_y)/(m_x - player_x)
+                        dist_2_bomb = (m_y - p_y)/(m_x - p_x)
                         if dist_2_bomb <= self.bomb_radius:
                             hit = True
 
