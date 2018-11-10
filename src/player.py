@@ -53,6 +53,7 @@ class Player:
             self.pwm.set_pwm(self.y_pin, 0, self.servo_y
                                             + self.turret.y_cal
                                             + self.y_offset)
+        return self.servo_x + self.x_offset, self.servo_y + self.y_offset
 
     def get_position(self):
         return self.servo_x + self.x_offset, self.servo_y + self.y_offset

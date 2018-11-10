@@ -39,10 +39,8 @@ class Pong:
                 curr_time = time.time()
                 if curr_time - prev_time >= self.time_rate:
                     prev_time = curr_time
-                    self.player_1.set_servo()
-                    self.player_2.set_servo()
-                    xp_1, yp_1 = self.player_1.get_position()
-                    xp_2, yp_2 = self.player_2.get_position()
+                    xp_1, yp_1 = self.player_1.set_servo()
+                    xp_2, yp_2 = self.player_2.set_servo()
                     print('player 1 pos: ', xp_1, yp_1)
                     print('player 2 pos: ', xp_2, yp_2)
                     print('ball pos: ', xs, ys)
