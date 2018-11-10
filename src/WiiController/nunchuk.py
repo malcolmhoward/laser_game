@@ -4,13 +4,17 @@
 ## Written by Jason - @Boeeerb          ##
 ##  jase@boeeerb.co.uk                  ##
 ##########################################
-##
-## v0.1 03/05/14 - Initital release
-## v0.2 21/06/14 - Retrieve one byte at a time [Simon Walters - @cymplecy]
-## v0.3 22/06/14 - Minor Refactoring [Jack Wearden - @JackWeirdy]
-## v0.32 25/6/14 - XOR each data byte with 0x17 and then add 0x17 to produce corrent values - Simon Walters @cymplecy
-## v0.4 26/6/14 - Change method of XOR and add delay parameter - Simon Walters @cymplecy
-## v0.41 30/3/15 - Adding support for RPI_REVISION 3 - John Lumley @Jelby-John
+"""
+DATA
+      Bit
+Byte |  7 |  6 |  5 |  4 |  3 |	 2 | 1  | 0  |
+0    |                SX<7:0>                |
+1    |                SY<7:0>                |
+2    |                AZ<9:2>                |
+3    |                AY<9:2>                |
+4    |                AZ<9:2>                |
+5    | AZ<1:0> | AY<1:0> | AX<1:0> | BC | BZ |
+"""
 
 from .wii_controller import WiiController
 
