@@ -1,5 +1,6 @@
 import time
 import random
+from typing import Generator
 from paths import Line
 from src import Player, NPC
 from src.player_controller import PlayerController
@@ -19,7 +20,9 @@ class MissileDefense:
         self.bound = bound
         self.center = center
         self.player = Player(bound, bound, pwm, player_turret, controller)
+        self.player.laser.on()
         self.missile = NPC(pwm, missile_turret)
+        self.missile.laser.on()
         self.playing = False
 
     def play_on(self):
@@ -54,7 +57,7 @@ class MissileDefense:
                         if dist_2_bomb <= self.bomb_radius:
                             hit = True
 
-    def make_missile(self):
+    def make_missile(self) -> Generator:
         y_low = int(self.center + self.bound / 2)
         y_high = int(self.center - self.bound/2)
         x_start = random.randint(y_high, y_low)
