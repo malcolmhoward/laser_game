@@ -73,19 +73,19 @@ class MissileDefense(Game):
                                 dist_2_bomb = sqrt((m_y - p_y)**2 + (m_x - p_x)**2)
                                 if dist_2_bomb <= self.bomb_radius:
                                     hit = True
-                        else:
-                            if laser_blink:
-                                self.player.laser.on()
-                            else:
-                                self.player.laser.off()
-                            laser_blink = not laser_blink
-                            if curr_time - player_fire_time > self.player_attack_rate:
-                                player_fired = False
-
                 else:
                     if curr_time - respawn_time > self.missile_delay:
                         missile_respawn = False
                         self.missile.laser.on()
+                # Handle player blinking even when missile respawning
+                if not player_fired:
+                    if laser_blink:
+                        self.player.laser.on()
+                    else:
+                        self.player.laser.off()
+                    laser_blink = not laser_blink
+                    if curr_time - player_fire_time > self.player_attack_rate:
+                        player_fired = False
 
     def make_missile(self, rate=1) -> Generator:
         y_low = int(self.center + self.bound / 2)
