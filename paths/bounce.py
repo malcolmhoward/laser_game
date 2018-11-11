@@ -8,9 +8,9 @@ class Bounce(Path):
         super().__init__(rate)
         self.x_start = x_start
         self.y_start = y_start
-        self.angle_rad = angle_rad
-        self.x_rate = rate * cos(self.angle_rad)
-        self.y_rate = rate * sin(self.angle_rad)
+        self._angle = angle_rad
+        self.x_rate = rate * cos(self._angle)
+        self.y_rate = rate * sin(self._angle)
 
     def data(self) -> Generator[Tuple[int, int], Tuple[bool, bool], None]:
         """
@@ -35,3 +35,23 @@ class Bounce(Path):
                 self.y_rate *= -1
             if vertical_hit:
                 self.x_rate *= -1
+
+    @property
+    def rate(self):
+        return self._rate
+
+    @rate.setter
+    def rate(self, rate):
+        self._rate = rate
+        self.x_rate = rate * cos(self._angle)
+        self.y_rate = rate * sin(self._angle)
+
+    @property
+    def angle(self):
+        return self._angle
+
+    @angle.setter
+    def angle(self, angle):
+        self._angle = angle
+        self.x_rate = self._rate * cos(self._angle)
+        self.y_rate = self._rate * sin(self._angle)
