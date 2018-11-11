@@ -11,6 +11,10 @@ from src.turret import Turret
 class MissileDefense(Game):
 
     bomb_radius = 10
+    # How long to delay until the missile comes alive
+    missile_delay = 1
+    # How much to increase the missile speed per success
+    rate_increase = 0.1
 
     def __init__(self, center, bound, pwm,
                  controller: PlayerController,
@@ -31,33 +35,41 @@ class MissileDefense(Game):
         homes_destroyed = 0
         missile_rate = 1
         missile = self.missile.follow_path(self.make_missile())
+        missile_respawn = False
+        respawn_time = time.time()
         while self.playing:
             if hit:
                 player_score += 1
-                missile_rate += 1
+                missile_rate += self.rate_increase
             if lose:
                 homes_destroyed += 1
             if hit or lose:
                 hit = False
                 lose = False
                 missile = self.missile.follow_path(self.make_missile(missile_rate))
+                missile_respawn = True
+                respawn_time = time.time()
             curr_time = time.time()
             if curr_time - prev_time >= self.time_rate:
                 prev_time = curr_time
                 p_x, p_y = self.player.set_servo()
-                try:
-                    m_x, m_y = missile.__next__()
-                except StopIteration:
-                    lose = True
+                if not missile_respawn:
+                    try:
+                        m_x, m_y = missile.__next__()
+                    except StopIteration:
+                        lose = True
+                    else:
+                        if self.player.firing():
+                            try:
+                                dist_2_bomb = (m_y - p_y)/(m_x - p_x)
+                            # If the x's are equal
+                            except ZeroDivisionError:
+                                dist_2_bomb = m_y - p_y
+                            if dist_2_bomb <= self.bomb_radius:
+                                hit = True
                 else:
-                    if self.player.firing():
-                        try:
-                            dist_2_bomb = (m_y - p_y)/(m_x - p_x)
-                        # If the x's are equal
-                        except ZeroDivisionError:
-                            dist_2_bomb = m_y - p_y
-                        if dist_2_bomb <= self.bomb_radius:
-                            hit = True
+                    if curr_time - respawn_time > self.missile_delay:
+                        missile_respawn = False
 
     def make_missile(self, rate=1) -> Generator:
         y_low = int(self.center + self.bound / 2)
@@ -65,4 +77,7 @@ class MissileDefense(Game):
         x_start = random.randint(y_high, y_low)
         x_end = random.randint(y_high, y_low)
         missile = Line(x_start, y_low, x_end, y_high, rate)
-        return missile.data()
+        data = missile.data()
+        # Let the servos get into position
+        data.__next__()
+        return data
