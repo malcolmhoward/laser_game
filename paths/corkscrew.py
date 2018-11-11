@@ -14,13 +14,13 @@ class Corkscrew(Circle):
         self.y_rate = linear_rate * sin(self.linear_angle)
         
     def data(self):
-        self.x_center += self.x_rate
-        self.y_center += self.y_rate
         x = self._radius * sin(self._angle) + self.x_center
         y = self._radius * cos(self._angle) + self.y_center
         yield int(x), int(y)
         angle_rate = self._angle + self._rate
         while fabs(x - self.x_end) > fabs(self.x_rate) and fabs(y - self.y_end) > fabs(self.y_rate):
+            self.x_center += self.x_rate
+            self.y_center += self.y_rate
             x = self._radius * sin(angle_rate) + self.x_center + self.x_rate
             y = self._radius * cos(angle_rate) + self.y_center + self.y_rate
             yield int(x), int(y)
