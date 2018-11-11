@@ -109,7 +109,7 @@ class MissileDefense(Game):
                     self.player.laser.on()
                 else:
                     self.player.laser.off()
-                    self.laser_blink = not self.laser_blink
+                self.laser_blink = not self.laser_blink
             else:
                 self.skip_frame = False
             if self.curr_time - self.fire_time > self.player_attack_rate:
