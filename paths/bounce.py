@@ -36,11 +36,7 @@ class Bounce(Path):
             if vertical_hit:
                 self.x_rate *= -1
 
-    @property
-    def rate(self):
-        return self._rate
-
-    @rate.setter
+    @Path.rate.setter
     def rate(self, rate):
         self._rate = rate
         self.x_rate = rate * cos(self._angle)
