@@ -7,7 +7,10 @@ from src import Player, NPC
 from .game import Game
 from src.player_controller import PlayerController
 from src.turret import Turret
-# TODO: Add lives laser that slowly trickles down
+# FIXME: Player can't reach turrets in the corners. Could just restrict them
+# TODO: Add missiles remaining counter that counts up until win
+# TODO: Move life counter out of bounds
+# TODO: Corkscrew missiles!
 
 
 class MissileDefense(Game):
@@ -27,7 +30,7 @@ class MissileDefense(Game):
     player_attack_rate = 1
     # Size of player attack
     bomb_radius = 10
-    player_fire = False
+    player_fired = False
     fire_time = 0
     skip_frame = False
     laser_blink = False
@@ -68,7 +71,6 @@ class MissileDefense(Game):
         self.life_counter.set_servo(int(center - bound/2), int(center + bound/2))
         self.life_counter.laser.on()
         self.life_distance = int(bound/self.lives)
-        self.player_fired = False
 
     def play_on(self):
         self.playing = True
@@ -106,13 +108,12 @@ class MissileDefense(Game):
                     except StopIteration:
                         lose = True
                     else:
-                        if not self.player_fired:
-                            if self.player.firing():
-                                self.player_fired = True
-                                self.fire_time = time.time()
-                                dist_2_bomb = sqrt((m_y - p_y)**2 + (m_x - p_x)**2)
-                                if dist_2_bomb <= self.bomb_radius:
-                                    hit = True
+                        if not self.player_fired and self.player.firing():
+                            self.player_fired = True
+                            self.fire_time = time.time()
+                            dist_2_bomb = sqrt((m_y - p_y)**2 + (m_x - p_x)**2)
+                            if dist_2_bomb <= self.bomb_radius:
+                                hit = True
                 else:
                     if self.curr_time - respawn_time > self.missile_delay:
                         missile_respawn = False
