@@ -1,6 +1,7 @@
 import time
 import random
 from typing import Generator
+from math import sqrt
 from paths import Line
 from src import Player, NPC
 from .game import Game
@@ -62,7 +63,7 @@ class MissileDefense(Game):
                     else:
                         if self.player.firing():
                             try:
-                                dist_2_bomb = (m_y - p_y)/(m_x - p_x)
+                                dist_2_bomb = sqrt((m_y - p_y)**2 + (m_x - p_x)**2)
                             # If the x's are equal
                             except ZeroDivisionError:
                                 dist_2_bomb = m_y - p_y
