@@ -58,7 +58,7 @@ class MissileDefense(Game):
         player_score = 0
         homes_destroyed = 0
         missile_rate = 1
-        missile = self.missile.follow_path(self.make_missile())
+        missile = self.make_missile()
         missile_respawn = False
         respawn_time = time.time()
         while self.playing:
@@ -130,6 +130,5 @@ class MissileDefense(Game):
         missile = self.missile.follow_path(path.data())
         # Let the servos get into position. Yes, yield twice
         missile.__next__()
-        # FIXME: If x or y are too close to each other, this can lead to premature StopIteration
         missile.__next__()
         return missile
