@@ -78,7 +78,7 @@ class MissileDefense(Game):
                         missile_respawn = False
                         self.missile.laser.on()
                 # Handle player blinking even when missile respawning
-                if not player_fired:
+                if player_fired:
                     if laser_blink:
                         self.player.laser.on()
                     else:
