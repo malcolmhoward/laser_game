@@ -46,6 +46,7 @@ class MissileDefense(Game):
             if hit or lose:
                 hit = False
                 lose = False
+                self.missile.laser.off()
                 missile = self.missile.follow_path(self.make_missile(missile_rate))
                 missile_respawn = True
                 respawn_time = time.time()
@@ -70,6 +71,7 @@ class MissileDefense(Game):
                 else:
                     if curr_time - respawn_time > self.missile_delay:
                         missile_respawn = False
+                        self.missile.laser.on()
 
     def make_missile(self, rate=1) -> Generator:
         y_low = int(self.center + self.bound / 2)
@@ -78,6 +80,7 @@ class MissileDefense(Game):
         x_end = random.randint(y_high, y_low)
         missile = Line(x_start, y_low, x_end, y_high, rate)
         data = missile.data()
-        # Let the servos get into position
+        # Let the servos get into position. Yes, yield twice
+        data.__next__()
         data.__next__()
         return data
