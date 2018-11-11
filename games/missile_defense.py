@@ -33,6 +33,9 @@ class MissileDefense(Game):
         self.playing = True
         hit = False
         lose = False
+        player_fired = False
+        laser_blink = False
+        player_fire_time = -1
         prev_time = 0
         player_score = 0
         homes_destroyed = 0
@@ -63,14 +66,22 @@ class MissileDefense(Game):
                     except StopIteration:
                         lose = True
                     else:
-                        if self.player.firing():
-                            try:
+                        if not player_fired:
+                            if self.player.firing():
+                                player_fired = True
+                                player_fire_time = time.time()
                                 dist_2_bomb = sqrt((m_y - p_y)**2 + (m_x - p_x)**2)
-                            # If the x's are equal
-                            except ZeroDivisionError:
-                                dist_2_bomb = m_y - p_y
-                            if dist_2_bomb <= self.bomb_radius:
-                                hit = True
+                                if dist_2_bomb <= self.bomb_radius:
+                                    hit = True
+                        else:
+                            if laser_blink:
+                                self.player.laser.on()
+                            else:
+                                self.player.laser.off()
+                            laser_blink = not laser_blink
+                            if curr_time - player_fire_time > self.player_attack_rate:
+                                player_fired = False
+
                 else:
                     if curr_time - respawn_time > self.missile_delay:
                         missile_respawn = False
