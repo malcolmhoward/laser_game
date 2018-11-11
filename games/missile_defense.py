@@ -16,6 +16,8 @@ class MissileDefense(Game):
     missile_delay = 1
     # How much to increase the missile speed per success
     rate_increase = 0.1
+    # Delay until the player can fire again
+    player_attack_rate = 0.5
 
     def __init__(self, center, bound, pwm,
                  controller: PlayerController,
@@ -48,7 +50,7 @@ class MissileDefense(Game):
                 hit = False
                 lose = False
                 self.missile.laser.off()
-                missile = self.missile.follow_path(self.make_missile(missile_rate))
+                missile = self.make_missile(missile_rate)
                 missile_respawn = True
                 respawn_time = time.time()
             curr_time = time.time()
@@ -79,9 +81,9 @@ class MissileDefense(Game):
         y_high = int(self.center - self.bound/2)
         x_start = random.randint(y_high, y_low)
         x_end = random.randint(y_high, y_low)
-        missile = Line(x_start, y_low, x_end, y_high, rate)
-        data = missile.data()
+        path = Line(x_start, y_low, x_end, y_high, rate)
+        missile = self.missile.follow_path(path.data())
         # Let the servos get into position. Yes, yield twice
-        data.__next__()
-        data.__next__()
-        return data
+        missile.__next__()
+        missile.__next__()
+        return missile
