@@ -9,11 +9,13 @@ class Corkscrew(Circle):
         self.x_end = x_end
         self.y_end = y_end
         self._linear_rate = linear_rate
-        self.linear_angle = atan2(y_center - y_end, x_center - x_end)
+        self.linear_angle = atan2(y_end - y_center, x_end - x_center)
         self.x_rate = linear_rate * cos(self.linear_angle)
         self.y_rate = linear_rate * sin(self.linear_angle)
         
     def data(self):
+        self.x_center += self.x_rate
+        self.y_center += self.y_rate
         x = self._radius * sin(self._angle) + self.x_center
         y = self._radius * cos(self._angle) + self.y_center
         yield int(x), int(y)
