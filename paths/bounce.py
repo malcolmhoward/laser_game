@@ -1,12 +1,13 @@
 from math import sin, cos
 from typing import Generator, Tuple
+from .path import Path
 
 
-class Bounce:
+class Bounce(Path):
     def __init__(self, x_start: int, y_start: int, angle_rad: float, rate: float):
+        super().__init__(rate)
         self.x_start = x_start
         self.y_start = y_start
-        self.rate = rate
         self.angle_rad = angle_rad
         self.x_rate = rate * cos(self.angle_rad)
         self.y_rate = rate * sin(self.angle_rad)

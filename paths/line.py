@@ -1,17 +1,18 @@
 from math import sin, cos, atan2, fabs
 from typing import Generator, Tuple
+from .path import Path
 
 
-class Line:
+class Line(Path):
     def __init__(self,
                  x_start: int, y_start: int,
                  x_end: int, y_end: int,
                  rate: float):
+        super().__init__(rate)
         self.x_start = x_start
         self.x_end = x_end
         self.y_start = y_start
         self.y_end = y_end
-        self.rate = rate
         self.angle = atan2(y_end - y_start, x_end - x_start)
         self.x_rate = rate * cos(self.angle)
         self.y_rate = rate * sin(self.angle)
@@ -32,9 +33,3 @@ class Line:
                 keep_going = True
             yield int(x), int(y)
         yield self.x_end, self.y_end
-
-if __name__ == '__main__':
-    l = Line(-100, 100, 50, 50, 1)
-    d = l.data()
-    for _ in d:
-        print(_)
