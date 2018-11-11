@@ -38,16 +38,36 @@ class MissileDefense(Game):
     missile_delay = 1
     # How much to increase the missile speed per success
     rate_increase = 0.1
+    '''
+    LIVES INFO
+    '''
+    lives = 10
+    life_pos = 0
 
     def __init__(self, center, bound, pwm,
                  controller: PlayerController,
                  player_turret: Turret,
-                 missile_turret: Turret):
+                 missile_turret: Turret,
+                 life_turret: Turret):
         super().__init__(center, bound, pwm)
+        '''
+        INIT PLAYER
+        '''
         self.player = Player(bound, bound, pwm, player_turret, controller)
         self.player.laser.on()
+        '''
+        INIT MISSILE
+        '''
         self.missile = NPC(pwm, missile_turret)
         self.missile.laser.on()
+        '''
+        INIT LIFE COUNTER
+        '''
+        self.life_counter = NPC(pwm, life_turret)
+        self.life_pos = int(center + bound/2)
+        self.life_counter.set_servo(int(center - bound/2), int(center + bound/2))
+        self.life_counter.laser.on()
+        self.life_distance = int(bound/self.lives)
         self.player_fired = False
 
     def play_on(self):
@@ -56,7 +76,6 @@ class MissileDefense(Game):
         lose = False
         prev_time = 0
         player_score = 0
-        homes_destroyed = 0
         missile_rate = 1
         missile = self.make_missile()
         missile_respawn = False
@@ -66,7 +85,10 @@ class MissileDefense(Game):
                 player_score += 1
                 missile_rate += self.rate_increase
             if lose:
-                homes_destroyed += 1
+                self.lives -= 1
+                self.life_pos -= self.life_distance
+                self.life_counter.set_servo(int(self.center - self.bound/2),
+                                            self.life_pos)
             if hit or lose:
                 hit = False
                 lose = False
