@@ -1,4 +1,5 @@
 import json
+import time
 import Adafruit_PCA9685
 from src.player import Player
 from src import PlayerNunchuk, pro_controller_factory
@@ -20,6 +21,7 @@ for turret, num in turrets.items():
         if player.firing():
             x_offset = x - 375
             y_offset = y - 375
+            time.sleep(2)
             break
     curr_cal['turret' + num]['x'] = x_offset
     curr_cal['turret' + num]['y'] = y_offset
