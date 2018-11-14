@@ -11,16 +11,17 @@ pwm = Adafruit_PCA9685.PCA9685()
 pwm.set_pwm_freq(60)
 # c = PlayerNunchuk(127, 127, 20, 200, 20, 200)
 c, _ = pro_controller_factory()
-player = Player(100, 100, pwm, TURRET_1, c)
-player.laser.on()
-while True:
-    player.set_servo()
-    if player.firing():
-        x, y = player.get_position()
-        x_offset = x - 375
-        y_offset = y - 375
-        break
-curr_cal['turret1']['x'] = x_offset
-curr_cal['turret1']['y'] = y_offset
+turrets = {TURRET_1: '1', TURRET_2: '2', TURRET_3: '3'}
+for turret, num in turrets.items():
+    player = Player(100, 100, pwm, turret, c)
+    player.laser.on()
+    while True:
+        x, y = player.set_servo()
+        if player.firing():
+            x_offset = x - 375
+            y_offset = y - 375
+            break
+    curr_cal['turret' + num]['x'] = x_offset
+    curr_cal['turret' + num]['y'] = y_offset
 with open('src/calibration.json', 'w') as json_file:
     json.dump(curr_cal, json_file)
