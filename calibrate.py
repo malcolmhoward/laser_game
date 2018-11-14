@@ -23,7 +23,7 @@ for turret, num in turrets.items():
             y_offset = y - 375
             time.sleep(2)
             break
-    curr_cal['turret' + num]['x'] = x_offset
-    curr_cal['turret' + num]['y'] = y_offset
+    curr_cal['turret' + num]['x'] += x_offset
+    curr_cal['turret' + num]['y'] += y_offset
 with open('src/calibration.json', 'w') as json_file:
     json.dump(curr_cal, json_file)
