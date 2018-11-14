@@ -1,7 +1,7 @@
 import json
 from .turret import Turret
 
-with open('calibration.json', 'r') as json_file:
+with open('src/calibration.json', 'r') as json_file:
     cal = json.load(json_file)
 
 TURRET_1 = Turret(0, 1, 17, 375, 375, x_cal=cal['turret1']['x'],
