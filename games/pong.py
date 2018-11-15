@@ -49,14 +49,11 @@ class Pong(Game):
             prev_time = 0
             xs, ys = ball.send((False, False))
             while self.playing:
-                curr_time = time.time()
-                if curr_time - prev_time >= self.time_rate:
-                    prev_time = curr_time
+                self.curr_time = time.time()
+                if self.curr_time - prev_time >= self.time_rate:
+                    prev_time = self.curr_time
                     xp_1, yp_1 = self.player_1.set_servo()
                     xp_2, yp_2 = self.player_2.set_servo()
-                    print('player 1 pos: ', xp_1, yp_1)
-                    print('player 2 pos: ', xp_2, yp_2)
-                    print('ball pos: ', xs, ys)
                     xp_1_hit = fabs(xp_1 - xs) <= self.x_hit
                     xp_2_hit = fabs(xp_2 - xs) <= self.x_hit
                     yp_1_hit = fabs(yp_1 - ys) <= self.paddle_length
@@ -116,8 +113,8 @@ class Pong(Game):
                 self.resetting = False
                 self.ball.laser.on()
 
-    def make_ball(self, rate=2):
-        bounce = Bounce(self.center, self.center, 1.5707, rate)
+    def make_ball(self, angle=2, rate=2):
+        bounce = Bounce(self.center, self.center, angle, rate)
         ball_servo = self.ball.follow_path(bounce.data())
         # Let the servos get into position. Yes, yield twice
         ball_servo.__next__()
