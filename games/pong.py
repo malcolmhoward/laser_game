@@ -63,11 +63,13 @@ class Pong(Game):
                         print('Player 1 loses!')
                         player_2_points += 1
                         self.resetting = True
+                        self.reset_time = time.time()
                         break
                     elif not yp_2_hit and xp_2_hit:
                         print('Player 2 loses!')
                         player_1_points += 1
                         self.resetting = True
+                        self.reset_time = time.time()
                         break
                     else:
                         top_hit = ys >= (self.center + self.bound/2)
