@@ -14,7 +14,7 @@ class Pong(Game):
     PLAYER INFO
     '''
     paddle_length = 10
-    x_hit = 2
+    x_hit = 0
 
     '''
     BALL INFO
@@ -36,6 +36,7 @@ class Pong(Game):
                                player_2_turret, player_2_controller,
                                no_x=True, fixed_x=int(center - bound/2))
         self.ball = NPC(pwm, npc_turret)
+        self.bounce = None
 
     def play_on(self):
         player_1_points = 0
@@ -79,11 +80,13 @@ class Pong(Game):
                             print('Player 1 hit!')
                             vertical_hit = True
                             horizontal_hit = False
+                            self.bounce.rate += 0.1
                         # Player 2 hit
                         elif yp_2_hit and xp_2_hit:
                             print('Player 2 hit!')
                             vertical_hit = True
                             horizontal_hit = False
+                            self.bounce.rate += 0.1
                         # Top or bottom wall hit
                         elif top_hit or bottom_hit:
                             horizontal_hit = True
@@ -116,8 +119,8 @@ class Pong(Game):
                 self.ball.laser.on()
 
     def make_ball(self, angle=2, rate=2):
-        bounce = Bounce(self.center, self.center, angle, rate)
-        ball_servo = self.ball.follow_path(bounce.data())
+        self.bounce = Bounce(self.center, self.center, angle, rate)
+        ball_servo = self.ball.follow_path(self.bounce.data())
         # Let the servos get into position. Yes, yield twice
         ball_servo.__next__()
         ball_servo.send((False, False))
