@@ -23,6 +23,8 @@ class Bounce(Path):
         """
         x = self.x_start
         y = self.y_start
+        h_already_hit = False
+        v_already_hit = False
         yield x, y
         while True:
             x += self.x_rate
@@ -32,9 +34,17 @@ class Bounce(Path):
             # Simply reverse the x/y rate depending on the wall type
             # TODO: could add a little variance in the angle with every bounce
             if horizontal_hit:
-                self.y_rate *= -1
+                if not h_already_hit:
+                    self.y_rate *= -1
+                    h_already_hit = True
+                else:
+                    h_already_hit = False
             if vertical_hit:
-                self.x_rate *= -1
+                if not v_already_hit:
+                    self.x_rate *= -1
+                    v_already_hit = True
+                else:
+                    v_already_hit = False
 
     @Path.rate.setter
     def rate(self, rate):
