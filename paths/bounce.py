@@ -1,4 +1,4 @@
-from math import sin, cos
+from math import sin, cos, copysign, fabs
 from typing import Generator, Tuple
 from .path import Path
 
@@ -48,9 +48,13 @@ class Bounce(Path):
 
     @Path.rate.setter
     def rate(self, rate):
+        # Get the sign of the rates before calculating
+        x_sign = copysign(1, self.x_rate)
+        y_sign = copysign(1, self.y_rate)
         self._rate = rate
-        self.x_rate = rate * cos(self._angle)
-        self.y_rate = rate * sin(self._angle)
+        # Multiply by the original sign to retain direction
+        self.x_rate = x_sign * fabs(rate * cos(self._angle))
+        self.y_rate = y_sign * fabs(rate * sin(self._angle))
 
     @property
     def angle(self):
@@ -58,6 +62,10 @@ class Bounce(Path):
 
     @angle.setter
     def angle(self, angle):
+        # Get the sign of the rates before calculating
+        x_sign = copysign(1, self.x_rate)
+        y_sign = copysign(1, self.y_rate)
         self._angle = angle
-        self.x_rate = self._rate * cos(self._angle)
-        self.y_rate = self._rate * sin(self._angle)
+        # Multiply by the original sign to retain direction
+        self.x_rate = x_sign * fabs(self._rate * cos(self._angle))
+        self.y_rate = y_sign * fabs(self._rate * sin(self._angle))
