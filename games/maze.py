@@ -18,12 +18,12 @@ class Maze(Game):
         self.playing = True
         restrict_x = False
         restrict_y = False
-        line =((375, 355), (375, 395))
+        lines =[((355, 355), (355, 395)), ((395, 355), (395, 395))]
         while self.playing:
             x, y = self.player.set_servo(restrict_x, restrict_y)
-            x_collision = x == line[0][0]
-            y_collision = line[0][1] <= y <= line[1][1]
-            if x_collision and y_collision:
-                restrict_x = True
-            else:
-                restrict_x = False
+            for line in lines:
+                x_collision = x == line[0][0]
+                y_collision = line[0][1] <= y <= line[1][1]
+                restrict_x = x_collision and y_collision
+                if restrict_x:
+                    break
