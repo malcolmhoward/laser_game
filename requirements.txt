@@ -2,3 +2,4 @@ smbus2
 RPi.GPIO
 gpiozero
 cachetools
+scipy
