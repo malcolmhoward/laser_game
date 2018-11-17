@@ -1,2 +1,2 @@
 from .euler_spiral import EulerSpiral
-from .hypotrochoid import Hypotrochoid
+from .Spirograph import Hypotrochoid, Hypocycloid, Epicycloid, Epitrochoid
