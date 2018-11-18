@@ -17,8 +17,9 @@ class NPC:
     def __init__(self, pwm, turret: Turret):
         self.pwm = pwm
         self.turret = turret
-        self.x_pin = turret.x_pin
-        self.y_pin = turret.y_pin
+        if self.turret is not None:
+            self.x_pin = turret.x_pin
+            self.y_pin = turret.y_pin
         self.laser = None
         if LED is not None:
             self.laser = LED(turret.laser_pin)
@@ -39,5 +40,6 @@ class NPC:
         while True:
             # Send the arg (if any) to the generator
             x, y = path_generator.send(gen_arg)
-            self.set_servo(x, y)
+            if self.laser is not None:
+                self.set_servo(x, y)
             gen_arg = yield x, y

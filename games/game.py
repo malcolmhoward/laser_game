@@ -11,6 +11,7 @@ class Game:
         self.time_rate = 1/60
         self.curr_time = 0
         self.player = None
+        self.game_screen_title = 'Game Title'
 
     def play_on(self):
         self.playing = True
@@ -38,7 +39,7 @@ class Game:
         game_screen_resolution = (self.bound, self.bound)
         self.game_window = pygame.display.set_mode(game_screen_resolution)
         game_screen_title = 'Maze Game'
-        pygame.display.set_caption(game_screen_title)
+        pygame.display.set_caption(self.game_screen_title)
         self.color_palette = {
             'white': (255, 255, 255)
         }

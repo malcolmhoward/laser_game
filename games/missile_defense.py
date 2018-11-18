@@ -55,12 +55,14 @@ class MissileDefense(Game):
         INIT PLAYER
         '''
         self.player = Player(bound, bound, pwm, player_turret, controller)
-        self.player.laser.on()
+        if self.player.laser is not None:
+            self.player.laser.on()
         '''
         INIT MISSILE
         '''
         self.missile = NPC(pwm, missile_turret)
-        self.missile.laser.on()
+        if self.missile.laser is not None:
+            self.missile.laser.on()
         '''
         INIT LIFE COUNTER
         '''
@@ -94,35 +96,38 @@ class MissileDefense(Game):
                 hit = False
                 lose = False
                 self.missile.laser.off()
-                missile = self.make_missile(missile_rate)
-                missile_respawn = True
-                respawn_time = time.time()
-            # Win/lose conditions
-            if player_score == 10:
-                pass
-            elif self.lives == 0:
-                pass
-            self.curr_time = time.time()
-            if self.curr_time - prev_time >= self.time_rate:
-                prev_time = self.curr_time
+            self.current_missile = self.make_missile(self.missile_rate)
+            self.missile_respawn = True
+            self.respawn_time = time.time()
+        # Win/lose conditions
+        if self.player_score == 10:
+            pass
+        elif self.lives == 0:
+            pass
+        self.curr_time = time.time()
+        if self.curr_time - self.prev_time >= self.time_rate:
+            prev_time = self.curr_time
+            p_x, p_y = 0, 0 # TODO get p_x and p_y from something other than the servo
+            if self.player.laser is not None:
                 p_x, p_y = self.player.set_servo()
-                if not missile_respawn:
-                    try:
-                        m_x, m_y = missile.__next__()
-                    except StopIteration:
-                        lose = True
-                    else:
-                        if not self.player_fired and self.player.firing():
-                            self.player_fired = True
-                            self.fire_time = time.time()
-                            dist_2_bomb = sqrt((m_y - p_y)**2 + (m_x - p_x)**2)
-                            if dist_2_bomb <= self.bomb_radius:
-                                hit = True
+            if not self.missile_respawn:
+                try:
+                    m_x, m_y = self.current_missile.__next__()
+                except StopIteration:
+                    self.lose = True
                 else:
-                    if self.curr_time - respawn_time > self.missile_delay:
-                        missile_respawn = False
+                    if not self.player_fired and self.player.firing():
+                        self.player_fired = True
+                        self.fire_time = time.time()
+                        dist_2_bomb = sqrt((m_y - p_y)**2 + (m_x - p_x)**2)
+                        if dist_2_bomb <= self.bomb_radius:
+                            self.hit = True
+            else:
+                if self.curr_time - self.respawn_time > self.missile_delay:
+                    self.missile_respawn = False
+                    if self.missile.laser is not None:
                         self.missile.laser.on()
-                self.handle_player_firing()
+            self.handle_player_firing()
 
     def handle_player_firing(self):
         """
@@ -155,8 +160,8 @@ class MissileDefense(Game):
         # Since the controllers can't reach the corners, restrict them
         x_end = random.randint(y_low + 20, y_high - 20)
         path = Line(x_start, y_high, x_end, y_low, rate)
-        missile = self.missile.follow_path(path.data())
+        self.current_missile = self.missile.follow_path(path.data())
         # Let the servos get into position. Yield once for init, yield again to move servos
-        missile.__next__()
-        missile.__next__()
-        return missile
+        self.current_missile.__next__()
+        self.current_missile.__next__()
+        return self.current_missile
