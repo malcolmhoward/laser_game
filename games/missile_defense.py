@@ -7,7 +7,6 @@ from src import Player, NPC
 from .game import Game
 from src.player_controller import PlayerController
 from src.turret import Turret
-# FIXME: Player can't reach turrets in the corners. Could just restrict them
 # TODO: Add missiles remaining counter that counts up until win
 # TODO: Move life counter out of bounds
 # TODO: Corkscrew missiles!
@@ -68,7 +67,8 @@ class MissileDefense(Game):
         '''
         self.life_counter = NPC(pwm, life_turret)
         self.life_pos = int(center + bound/2)
-        self.life_counter.set_servo(int(center - bound/2), int(center + bound/2))
+        # Put life counter out of bounds
+        self.life_counter.set_servo(int(center - bound/2) + 10, int(center + bound/2))
         self.life_counter.laser.on()
         self.life_distance = int(bound/self.lives)
 
@@ -89,7 +89,7 @@ class MissileDefense(Game):
             if lose:
                 self.lives -= 1
                 self.life_pos -= self.life_distance
-                self.life_counter.set_servo(int(self.center - self.bound/2),
+                self.life_counter.set_servo(int(self.center - self.bound/2) + 10,
                                             self.life_pos)
             if hit or lose:
                 hit = False
@@ -98,6 +98,11 @@ class MissileDefense(Game):
                 missile = self.make_missile(missile_rate)
                 missile_respawn = True
                 respawn_time = time.time()
+            # Win/lose conditions
+            if player_score == 10:
+                pass
+            elif self.lives == 0:
+                pass
             self.curr_time = time.time()
             if self.curr_time - prev_time >= self.time_rate:
                 prev_time = self.curr_time
@@ -145,13 +150,14 @@ class MissileDefense(Game):
         :param rate:
         :return:
         """
-        y_low = int(self.center + self.bound / 2)
-        y_high = int(self.center - self.bound/2)
-        x_start = random.randint(y_high, y_low)
-        x_end = random.randint(y_high, y_low)
-        path = Line(x_start, y_low, x_end, y_high, rate)
+        y_low = int(self.center - self.bound / 2)
+        y_high = int(self.center + self.bound / 2)
+        x_start = random.randint(y_low, y_high)
+        # Since the controllers can't reach the corners, restrict them
+        x_end = random.randint(y_low + 20, y_high - 20)
+        path = Line(x_start, y_high, x_end, y_low, rate)
         missile = self.missile.follow_path(path.data())
-        # Let the servos get into position. Yes, yield twice
+        # Let the servos get into position. Yield once for init, yield again to move servos
         missile.__next__()
         missile.__next__()
         return missile
