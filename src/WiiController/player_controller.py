@@ -3,6 +3,7 @@ from .classic_controller import ClassicController
 from .pro_controller import ProController
 from .nunchuk import Nunchuk
 
+
 class PlayerNunchuk(PlayerController):
     def __init__(self, x_center, y_center, x_min, x_max, y_min, y_max):
         super().__init__(x_center, y_center, x_min, x_max, y_min, y_max)

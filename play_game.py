@@ -15,7 +15,13 @@ if game_name is not None:
 	print('play the {} game'.format(game_name))
 	game = None
 	if game_name in ['maze', 'Maze']:
-		game = Maze(center=0, bound=400, pwm=None, controller=None, player_turret=None)
+		game = Maze(
+			center=0,
+			bound=400,
+			pwm=None,
+			controller=None,
+			player_turret=None
+		)
 	elif game_name in ['missle_defense', 'MissileDefense']:
 		game = MissileDefense(
 			center=0,
@@ -27,7 +33,16 @@ if game_name is not None:
 			life_turret=None
 		)
 	elif game_name in ['pong', 'Pong']:
-		game = Pong(center=0, bound=400, pwm=None, controller=None, player_turret=None)
+		game = Pong(
+			center=0,
+			bound=400,
+			pwm=None,
+			player_1_controller=None,
+			player_2_controller=None,
+			player_1_turret=None,
+			player_2_turret=None,
+			npc_turret=None
+		)
 	if game is not None:
 		game.play_on()
 else:

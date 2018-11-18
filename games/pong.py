@@ -38,67 +38,73 @@ class Pong(Game):
         self.ball = NPC(pwm, npc_turret)
         self.bounce = None
 
-    def play_on(self):
-        player_1_points = 0
-        player_2_points = 0
-        self.playing = True
-        self.ball.laser.on()
-        self.player_1.laser.on()
-        self.player_2.laser.on()
-        # vertical_hit = False
-        # horizontal_hit = False
-        while self.playing:
-            ball = self.make_ball(self.ball_rate)
-            prev_time = 0
-            # xs, ys = ball.send((horizontal_hit, vertical_hit))
-            while self.playing:
-                self.curr_time = time.time()
-                if self.curr_time - prev_time >= self.time_rate:
-                    if not self.resetting:
-                        # xs, ys = ball.send((horizontal_hit, vertical_hit))
-                        xs, ys = ball.__next__()
-                    else:
-                        xs = self.center
-                        ys = self.center
-                    prev_time = self.curr_time
-                    x_1, y_1 = self.player_1.set_servo()
-                    x_2, y_2 = self.player_2.set_servo()
-                    x_1_hit = fabs(x_1 - xs) <= self.x_hit
-                    x_2_hit = fabs(x_2 - xs) <= self.x_hit
-                    y_1_hit = fabs(y_1 - ys) <= self.paddle_length
-                    y_2_hit = fabs(y_2 - ys) <= self.paddle_length
-                    # Player 1 or 2 lose
-                    if not y_1_hit and x_1_hit:
-                        player_2_points += 1
-                        self.resetting = True
-                        self.reset_time = time.time()
-                        break
-                    elif not y_2_hit and x_2_hit:
-                        player_1_points += 1
-                        self.resetting = True
-                        self.reset_time = time.time()
-                        break
-                    else:
-                        top_hit = ys >= (self.center + self.bound/2)
-                        bottom_hit = ys <= (self.center - self.bound/2)
-                        # Player hit
-                        if (y_1_hit and x_1_hit) or (y_2_hit and x_2_hit):
-                            # vertical_hit = True
-                            self.bounce.vertical_hit()
-                            # horizontal_hit = False
-                            self.bounce.rate += 0.1
-                        # Top or bottom wall hit
-                        elif top_hit or bottom_hit:
-                            # vertical_hit = False
-                            # horizontal_hit = True
-                            self.bounce.horizontal_hit()
-                        # else:
-                        #     vertical_hit = False
-                        #     horizontal_hit = False
-                        # if not self.resetting:
-                        #     xs, ys = ball.send((horizontal_hit,
-                        #                         vertical_hit))
-                    self.handle_ball_resetting()
+    def init_game(self):
+        self.game_screen_title = 'Pong Game'
+        super().init_game(player=self.player_1)
+        self.player_1_points = 0
+        self.player_2_points = 0
+        if self.ball.laser is not None:
+            self.ball.laser.on()
+            self.player_1.laser.on()
+            self.player_2.laser.on()
+
+    def run_game_logic(self):
+
+        self.current_ball = self.make_ball(self.ball_rate)
+        self.prev_time = 0
+        xs, ys = self.current_ball.send((False, False))
+        # TODO: Recondiser this while loop, unless self.make_ball() or self.ball.send() can set self.playing to False
+        # while self.playing:
+        self.curr_time = time.time()
+        if self.curr_time - self.prev_time >= self.time_rate:
+            self.prev_time = self.curr_time
+            xp_1, yp_1 = 0, 0
+            xp_2, yp_2 = 0, 0
+            if self.ball.laser is not None:
+                xp_1, yp_1 = self.player_1.set_servo()
+                xp_2, yp_2 = self.player_2.set_servo()
+            xp_1_hit = fabs(xp_1 - xs) <= self.x_hit
+            xp_2_hit = fabs(xp_2 - xs) <= self.x_hit
+            yp_1_hit = fabs(yp_1 - ys) <= self.paddle_length
+            yp_2_hit = fabs(yp_2 - ys) <= self.paddle_length
+            # Player 1 or 2 lose
+            if not yp_1_hit and xp_1_hit:
+                print('Player 1 loses!')
+                self.player_2_points += 1
+                self.resetting = True
+                self.reset_time = time.time()
+                self.playing = False
+            elif not yp_2_hit and xp_2_hit:
+                print('Player 2 loses!')
+                self.player_1_points += 1
+                self.resetting = True
+                self.reset_time = time.time()
+                self.playing = False
+            else:
+                top_hit = ys >= (self.center + self.bound/2)
+                bottom_hit = ys <= (self.center - self.bound/2)
+                # Player 1 hit
+                if yp_1_hit and xp_1_hit:
+                    print('Player 1 hit!')
+                    vertical_hit = True
+                    horizontal_hit = False
+                    self.bounce.rate += 0.1
+                # Player 2 hit
+                elif yp_2_hit and xp_2_hit:
+                    print('Player 2 hit!')
+                    vertical_hit = True
+                    horizontal_hit = False
+                    self.bounce.rate += 0.1
+                # Top or bottom wall hit
+                elif top_hit or bottom_hit:
+                    horizontal_hit = True
+                    vertical_hit = False
+                else:
+                    horizontal_hit = False
+                    vertical_hit = False
+                if not self.resetting:
+                    xs, ys = self.current_ball.send((horizontal_hit, vertical_hit))
+            self.handle_ball_resetting()
 
     def handle_ball_resetting(self):
         """

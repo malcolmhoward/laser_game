@@ -29,7 +29,10 @@ class Game:
     def run_game_logic(self):
         ...
 
-    def init_game(self):
+    def init_game(self, player=None):
+        # This is an override for games that are multiplayer, where self.player does not exist, i.e. self.player_1
+        if player:
+            self.player = player
         self.use_gui = self.player.laser is None
         if self.use_gui:
             self.init_gui()

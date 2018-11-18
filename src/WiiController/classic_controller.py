@@ -16,6 +16,7 @@ Byte |    7    | 6   |	5  | 4  | 3  |	2  | 1   |	0  |
 
 from .wii_controller import WiiController
 
+
 class ClassicController(WiiController):
 
     def __init__(self, delay=0.05):
