@@ -1,5 +1,14 @@
 from typing import Generator
-from gpiozero import LED
+try:
+    from gpiozero import LED
+except Exception as e:
+    if e.__class__.__name__ == "BadPinFactory":
+        print("gpiozero.exc.BadPinFactory: Unable to load any default pin factory!")
+        print("Setting LED to None..")
+        LED = None
+    else:
+        raise(e)
+
 from .turret import Turret
 
 
@@ -10,7 +19,9 @@ class NPC:
         self.turret = turret
         self.x_pin = turret.x_pin
         self.y_pin = turret.y_pin
-        self.laser = LED(turret.laser_pin)
+        self.laser = None
+        if LED is not None:
+            self.laser = LED(turret.laser_pin)
 
     def set_servo(self, x: int, y: int):
         self.pwm.set_pwm(self.x_pin, 0, x + self.turret.x_cal)

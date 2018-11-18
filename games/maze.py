@@ -4,6 +4,8 @@ from src import Player
 from src.player_controller import PlayerController
 from src.turret import Turret
 
+import pygame
+from pygame.locals import QUIT
 
 class Wall:
     thickness = 6

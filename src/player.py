@@ -1,6 +1,7 @@
 from math import fabs
 from gpiozero import LED
 from .turret import Turret
+
 from .player_controller import PlayerController
 
 
@@ -19,10 +20,13 @@ class Player:
         self.y_bound = y_bound
         self.controller = controller
         self.turret = turret
-        self.laser = LED(turret.laser_pin)
+        self.laser = None
+        if LED is not None:
+            self.laser = LED(turret.laser_pin)
         self.pwm = pwm
-        self.x_pin = turret.x_pin
-        self.y_pin = turret.y_pin
+        if turret is not None:
+            self.x_pin = turret.x_pin
+            self.y_pin = turret.y_pin
         self.x_offset = x_offset
         self.y_offset = y_offset
         self.no_x = no_x
@@ -30,7 +34,8 @@ class Player:
         self.fixed_x = fixed_x
         if fixed_x:
             self.servo_x = fixed_x
-            pwm.set_pwm(self.x_pin, 0, fixed_x + turret.x_cal)
+            if turret is not None:
+                pwm.set_pwm(self.x_pin, 0, fixed_x + turret.x_cal)
         else:
             if initial_x is not None:
                 self.servo_x = initial_x
@@ -42,7 +47,8 @@ class Player:
         self.fixed_y = fixed_y
         if fixed_y:
             self.servo_y = fixed_y
-            pwm.set_pwm(self.x_pin, 0, fixed_y + turret.y_cal)
+            if turret is not None:
+                pwm.set_pwm(self.x_pin, 0, fixed_y + turret.y_cal)
         else:
             if initial_y is not None:
                 self.servo_y = initial_y
