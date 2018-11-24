@@ -1,35 +1,40 @@
 from math import cos, sin, pi
 from ..path import Path
 
+"""
+Assume all maximums will be around R + r + d
+"""
+
 
 class Spirograph(Path):
 
-    def __init__(self, rate, big_r, little_r):
+    def __init__(self, center, rate, big_r, little_r):
         super().__init__(rate)
         if little_r == 0:
             raise ValueError('Little r cannot be zero.')
+        self.center = center
         self.big_r = big_r
         self.little_r = little_r
 
 
 class Hypo(Spirograph):
-    def __init__(self, rate, big_r, little_r):
+    def __init__(self, center, rate, big_r, little_r):
         if little_r == big_r:
             raise ValueError('Little r and Big R cannot be equal.')
-        super().__init__(rate, big_r, little_r)
+        super().__init__(center, rate, big_r, little_r)
         self.ratio = self.big_r - self.little_r
 
 
 class Epi(Spirograph):
-    def __init__(self, rate, big_r, little_r):
-        super().__init__(rate, big_r, little_r)
+    def __init__(self, center, rate, big_r, little_r):
+        super().__init__(center, rate, big_r, little_r)
         self.ratio = self.big_r + self.little_r
 
 
 class Hypotrochoid(Hypo):
 
-    def __init__(self, rate, big_r, little_r, d):
-        super().__init__(rate, big_r, little_r)
+    def __init__(self, center, rate, big_r, little_r, d):
+        super().__init__(center, rate, big_r, little_r)
         self.d = d
 
     def data(self):
@@ -48,8 +53,8 @@ class Hypotrochoid(Hypo):
 
 class Hypocycloid(Hypo):
 
-    def __init__(self, rate, big_r, little_r):
-        super().__init__(rate, big_r, little_r)
+    def __init__(self, center, rate, big_r, little_r):
+        super().__init__(center, rate, big_r, little_r)
 
     def data(self):
         angle = 0
@@ -67,8 +72,8 @@ class Hypocycloid(Hypo):
 
 class Epicycloid(Epi):
 
-    def __init__(self, rate, big_r, little_r):
-        super().__init__(rate, big_r, little_r)
+    def __init__(self, center, rate, big_r, little_r):
+        super().__init__(center, rate, big_r, little_r)
 
     def data(self):
         angle = 0
@@ -86,8 +91,8 @@ class Epicycloid(Epi):
 
 class Epitrochoid(Epi):
 
-    def __init__(self, rate, big_r, little_r, d):
-        super().__init__(rate, big_r, little_r,)
+    def __init__(self, center, rate, big_r, little_r, d):
+        super().__init__(center, rate, big_r, little_r,)
         self.d = d
 
     def data(self):
