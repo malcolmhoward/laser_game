@@ -42,7 +42,7 @@ class Hypotrochoid(Hypo):
         while True:
             x = self.ratio * cos(angle) + self.d * cos(self.ratio / self.little_r * angle)
             y = self.ratio * sin(angle) - self.d * sin(self.ratio / self.little_r * angle)
-            yield int(x), int(y)
+            yield int(x + self.center), int(y+ self.center)
             # iterate angle and normalize
             angle += self.rate
             if angle >= 2 * pi:
@@ -61,7 +61,7 @@ class Hypocycloid(Hypo):
         while True:
             x = self.ratio * cos(angle) + self.little_r * cos(self.ratio / self.little_r * angle)
             y = self.ratio * sin(angle) - self.little_r * sin(self.ratio / self.little_r * angle)
-            yield int(x), int(y)
+            yield int(x + self.center), int(y+ self.center)
             # iterate angle and normalize
             angle += self.rate
             if angle >= 2 * pi:
@@ -80,7 +80,7 @@ class Epicycloid(Epi):
         while True:
             x = self.ratio * cos(angle) - self.little_r * cos(self.ratio / self.little_r * angle)
             y = self.ratio * sin(angle) - self.little_r * sin(self.ratio / self.little_r * angle)
-            yield int(x), int(y)
+            yield int(x + self.center), int(y+ self.center)
             # iterate angle and normalize
             angle += self.rate
             if angle >= 2 * pi:
@@ -100,7 +100,7 @@ class Epitrochoid(Epi):
         while True:
             x = self.ratio * cos(angle) - self.d * cos(self.ratio / self.little_r * angle)
             y = self.ratio * sin(angle) - self.d * sin(self.ratio / self.little_r * angle)
-            yield int(x), int(y)
+            yield int(x + self.center), int(y+ self.center)
             # iterate angle and normalize
             angle += self.rate
             if angle >= 2 * pi:
