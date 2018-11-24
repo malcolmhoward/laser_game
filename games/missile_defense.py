@@ -8,7 +8,6 @@ from .game import Game
 from src.player_controller import PlayerController
 from src.turret import Turret
 # TODO: Add missiles remaining counter that counts up until win
-# TODO: Move life counter out of bounds
 # TODO: Corkscrew missiles!
 
 
@@ -68,7 +67,7 @@ class MissileDefense(Game):
         self.life_counter = NPC(pwm, life_turret)
         self.life_pos = int(center + bound/2)
         # Put life counter out of bounds
-        self.life_counter.set_servo(int(center - bound/2) + 10, int(center + bound/2))
+        self.life_counter.set_servo(int(center - bound/2) - 10, int(center + bound/2))
         self.life_counter.laser.on()
         self.life_distance = int(bound/self.lives)
 
@@ -89,7 +88,7 @@ class MissileDefense(Game):
             if lose:
                 self.lives -= 1
                 self.life_pos -= self.life_distance
-                self.life_counter.set_servo(int(self.center - self.bound/2) + 10,
+                self.life_counter.set_servo(int(self.center - self.bound/2) - 10,
                                             self.life_pos)
             if hit or lose:
                 hit = False
