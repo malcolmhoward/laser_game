@@ -12,6 +12,8 @@ class Game:
         self.curr_time = 0
         self.player = None
         self.game_screen_title = 'Game Title'
+        self.laser_radius = 1
+        self.wall_width = 5
 
     def play_on(self):
         self.playing = True
@@ -24,8 +26,10 @@ class Game:
                         self.playing = False
                         print('Game window closed.  Now exiting game...')
                 # Capture keyboard arrow input to update location of player-controlled game objects
-                xchange, ychange = 0, 0
-                movement_distance = 1
+                # We're using floats here instead of int to allow for more precise changes
+                # Be sure to cast to int as needed when it's time to draw
+                xchange, ychange = 0.0, 0.0
+                movement_distance = .1
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         xchange = -movement_distance
@@ -77,11 +81,14 @@ class Game:
         }
 
     def draw_laser(self, x=200, y=200):
-        pygame.draw.circle(self.game_window, self.color_palette.get('red'), [x, y], 5)
+        # pygame.draw.circle(), which requires int values, so cast x and y just in case those are float values
+        pygame.draw.circle(self.game_window, self.color_palette.get('red'), [int(x), int(y)], self.laser_radius)
 
     def draw_lasers(self, x=200, y=200):
         # TODO: This should iterate through a list of x/y coordinates for all available lasers to call pygame.draw.circle
         pass
 
-    def draw_wall(self, start_pos=(0, 0), end_pos=(200, 200)):
-        pygame.draw.line(self.game_window, self.color_palette.get('red'), start_pos, end_pos, 5)
+    def draw_wall(self, start_pos=(0, 0), end_pos=(200, 200), wall_thickness=0):
+        if not wall_thickness:
+            wall_thickness = self.wall_width
+        pygame.draw.line(self.game_window, self.color_palette.get('red'), start_pos, end_pos, wall_thickness)
