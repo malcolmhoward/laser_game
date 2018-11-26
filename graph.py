@@ -14,5 +14,6 @@ npc = NPC(pwm, TURRET_1)
 npc.laser.on()
 graph = npc.follow_path(d)
 curr_time = time.time()
-while time.time() - curr_time > 1/60:
-    graph.__next__()
+while True:
+    if time.time() - curr_time > 1/60:
+        graph.__next__()
