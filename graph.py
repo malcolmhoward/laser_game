@@ -7,7 +7,7 @@ from paths.math import Hypotrochoid
 pwm = Adafruit_PCA9685.PCA9685()
 pwm.set_pwm_freq(60)
 
-h = Hypotrochoid(375, 1, 30, 20, 5)
+h = Hypotrochoid(375, 1/60, 50, 20, 10)
 d = h.data()
 
 npc = NPC(pwm, TURRET_1)
