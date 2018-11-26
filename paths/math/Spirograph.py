@@ -20,6 +20,8 @@ class Spirograph(Path):
 class Hypotrochoid(Spirograph):
     """
 
+    I don't think it's possible to normalize the angle as each formula has a
+    different value of completion
     Hypocycloid: b = little_r
     """
 
@@ -34,18 +36,14 @@ class Hypotrochoid(Spirograph):
             x = self.ratio * cos(angle) + self.d * cos(self.ratio / self.little_r * angle)
             y = self.ratio * sin(angle) - self.d * sin(self.ratio / self.little_r * angle)
             yield int(x + self.center), int(y+ self.center)
-            # iterate angle and normalize
             angle += self.rate
-            # FIXME: Any way to bound this?
-            # if angle >= 2 * pi:
-            #     angle -= 2 * pi
-            # elif angle <= -2 * pi:
-            #     angle += 2 * pi
 
 
 class Epitrochoid(Spirograph):
     """
 
+    I don't think it's possible to normalize the angle as each formula has a
+    different value of completion
     Epicycloid: b = little_r
     """
 
@@ -60,9 +58,4 @@ class Epitrochoid(Spirograph):
             x = self.ratio * cos(angle) - self.d * cos(self.ratio / self.little_r * angle)
             y = self.ratio * sin(angle) - self.d * sin(self.ratio / self.little_r * angle)
             yield int(x + self.center), int(y+ self.center)
-            # iterate angle and normalize
             angle += self.rate
-            # if angle >= 2 * pi:
-            #     angle -= 2 * pi
-            # elif angle <= -2 * pi:
-            #     angle += 2 * pi
