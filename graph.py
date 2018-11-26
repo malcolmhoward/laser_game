@@ -1,3 +1,4 @@
+import time
 import Adafruit_PCA9685
 from src import NPC
 from src.TURRETS import TURRET_1
@@ -12,5 +13,6 @@ d = h.data()
 npc = NPC(pwm, TURRET_1)
 npc.laser.on()
 graph = npc.follow_path(d)
-while True:
+curr_time = time.time()
+while time.time() - curr_time > 1/60:
     graph.__next__()
