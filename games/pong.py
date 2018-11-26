@@ -49,7 +49,6 @@ class Pong(Game):
             self.player_2.laser.on()
 
     def run_game_logic(self):
-
         self.current_ball = self.make_ball(self.ball_rate)
         self.prev_time = 0
         xs, ys = self.current_ball.send((False, False))

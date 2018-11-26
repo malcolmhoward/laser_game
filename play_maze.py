@@ -1,7 +1,7 @@
 import Adafruit_PCA9685
 from games import Maze
 from src.TURRETS import TURRET_1
-from src import pro_controller_factory
+from src.WiiController import pro_controller_factory
 
 left, right = pro_controller_factory()
 
