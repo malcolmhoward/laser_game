@@ -34,9 +34,9 @@ class Wall:
                     binding_values['max_x'] = self.x_start
             else:
                 if self.y_end - self.thickness/2 - y < 0:
-                    binding_values['max_x'] = self.y_start
+                    binding_values['max_y'] = self.y_start
                 else:
-                    binding_values['min_x'] = self.y_end
+                    binding_values['min_y'] = self.y_end
         return binding_values
 
 
