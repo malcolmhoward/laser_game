@@ -28,15 +28,15 @@ class Wall:
         binding_values = {}
         if self.x_start <= x <= self.x_end and self.y_start <= y <= self.y_end:
             if self.is_vertical:
-                if self.x_end - self.thickness/2 - x < 0:
-                    binding_values['min_x'] = self.x_end
+                if self.x_end - self.thickness/2 - x > 0:
+                    binding_values['min_x'] = self.x_start
                 else:
-                    binding_values['max_x'] = self.x_start
+                    binding_values['max_x'] = self.x_end
             else:
-                if self.y_end - self.thickness/2 - y < 0:
-                    binding_values['max_y'] = self.y_start
+                if self.y_end - self.thickness/2 - y > 0:
+                    binding_values['min_y'] = self.y_start
                 else:
-                    binding_values['min_y'] = self.y_end
+                    binding_values['max_y'] = self.y_end
         return binding_values
 
 
