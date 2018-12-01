@@ -6,7 +6,7 @@ from src.turret import Turret
 
 
 class Wall:
-    thickness = 3
+    thickness = 4
 
     def __init__(self, x_start, y_start, x_end=0, y_end=0):
         self.x_start = x_start
@@ -25,9 +25,19 @@ class Wall:
             self.y_end = y_end
 
     def has_collided(self, x, y):
-        x_collision = self.x_start <= x <= self.x_end
-        y_collision = self.y_start <= y <= self.y_end
-        return x_collision and y_collision
+        binding_values = {}
+        if self.x_start <= x <= self.x_end and self.y_start <= y <= self.y_end:
+            if self.is_vertical:
+                if self.x_end - self.thickness/2 - x < 0:
+                    binding_values['min_x'] = self.x_end
+                else:
+                    binding_values['max_x'] = self.x_start
+            else:
+                if self.y_end - self.thickness/2 - y < 0:
+                    binding_values['max_x'] = self.y_start
+                else:
+                    binding_values['min_x'] = self.y_end
+        return binding_values
 
 
 class Maze(Game):
@@ -42,15 +52,15 @@ class Maze(Game):
 
     def play_on(self):
         self.playing = True
+        binding = {}
         lines =[Wall(355, 355, y_end=395), Wall(355, 395, x_end=395)]
         while self.playing:
-            restrict_x = False
-            restrict_y = False
-            x, y = self.player.set_servo(restrict_x, restrict_y)
+            x, y = self.player.set_servo(**binding)
+            binding = {}
             for line in lines:
-                collide = line.has_collided(x, y)
-                if collide:
-                    if not restrict_x:
-                        restrict_x = line.is_vertical
-                    if not restrict_y:
-                        restrict_y = line.is_horizontal
+                binding.update(line.has_collided(x, y))
+                # if collide:
+                #     if not restrict_x:
+                #         restrict_x = line.is_vertical
+                #     if not restrict_y:
+                #         restrict_y = line.is_horizontal
