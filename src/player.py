@@ -41,15 +41,24 @@ class Player:
         self.xb = turret.x_center - self.xm * controller.x_center
         self.yb = turret.y_center - self.ym * controller.y_center
 
-    def set_servo(self, restrict_x=False, restrict_y=False):
+    def set_servo(self, min_x=None, max_x=None, min_y=None, max_y=None):
         x, y = self.controller.joystick()
-        if not self.no_x and not restrict_x:
+        if not self.no_x:
+            
             self.servo_x = int(self.xm * x + self.xb)
+            if min_x is not None:
+                self.servo_x = min(min_x, self.servo_x)
+            if max_x is not None:
+                self.servo_x = max(max_x, self.servo_x)
             self.pwm.set_pwm(self.x_pin, 0, self.servo_x
                                             + self.turret.x_cal
                                             + self.x_offset)
-        if not self.no_y and not restrict_y:
+        if not self.no_y:
             self.servo_y = int(self.ym * y + self.yb)
+            if min_y is not None:
+                self.servo_y = min(min_y, self.servo_y)
+            if max_y is not None:
+                self.servo_y = max(max_y, self.servo_y)
             self.pwm.set_pwm(self.y_pin, 0, self.servo_y
                                             + self.turret.y_cal
                                             + self.y_offset)
