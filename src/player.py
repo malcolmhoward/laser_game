@@ -1,3 +1,4 @@
+from math import fabs
 from gpiozero import LED
 from .turret import Turret
 from .player_controller import PlayerController
@@ -57,7 +58,7 @@ class Player:
         """
         self.x_range = controller.x_max - controller.x_center
         self.y_range = controller.y_max - controller.y_center
-        self.manual_rate = 10
+        self.manual_rate = 2
 
     def set_servo(self, min_x=None, max_x=None, min_y=None, max_y=None):
         x, y = self.controller.joystick()
@@ -86,23 +87,25 @@ class Player:
         x_delta = self.controller.x_center - x
         y_delta = self.controller.y_center - y
         if not self.no_x:
-            self.servo_x += int(x_delta / self.x_range * self.manual_rate)
-            if min_x is not None:
-                self.servo_x = min(min_x, self.servo_x)
-            if max_x is not None:
-                self.servo_x = max(max_x, self.servo_x)
-            self.pwm.set_pwm(self.x_pin, 0, self.servo_x
-                                            + self.turret.x_cal
-                                            + self.x_offset)
+            if fabs(x_delta) > 0.1 * self.x_range:
+                self.servo_x += int(x_delta / self.x_range * self.manual_rate)
+                if min_x is not None:
+                    self.servo_x = min(min_x, self.servo_x)
+                if max_x is not None:
+                    self.servo_x = max(max_x, self.servo_x)
+                self.pwm.set_pwm(self.x_pin, 0, self.servo_x
+                                                + self.turret.x_cal
+                                                + self.x_offset)
         if not self.no_y:
-            self.servo_y += int(y_delta / self.y_range * self.manual_rate)
-            if min_y is not None:
-                self.servo_y = min(min_y, self.servo_y)
-            if max_y is not None:
-                self.servo_y = max(max_y, self.servo_y)
-            self.pwm.set_pwm(self.y_pin, 0, self.servo_y
-                                            + self.turret.y_cal
-                                            + self.y_offset)
+            if fabs(y_delta) > 0.1 * self.y_range:
+                self.servo_y += int(y_delta / self.y_range * self.manual_rate)
+                if min_y is not None:
+                    self.servo_y = min(min_y, self.servo_y)
+                if max_y is not None:
+                    self.servo_y = max(max_y, self.servo_y)
+                self.pwm.set_pwm(self.y_pin, 0, self.servo_y
+                                                + self.turret.y_cal
+                                                + self.y_offset)
         return self.servo_x + self.x_offset, self.servo_y + self.y_offset
 
     def get_position(self):
