@@ -93,9 +93,9 @@ class Player:
             if fabs(x_delta) > 0.1 * self.x_range:
                 self.servo_x += int(x_delta / self.x_range * self.manual_rate)
                 if min_x is not None:
-                    min_x_vals = [min_x, self.servo_x, int(self.x_center - self.x_bound/2)]
+                    min_x_vals = [min_x, self.servo_x, int(self.x_center + self.x_bound/2)]
                 else:
-                    min_x_vals = [self.servo_x, int(self.x_bound / 2 + self.x_center)]
+                    min_x_vals = [self.servo_x, int(self.x_center + self.x_bound / 2)]
                 self.servo_x = min(*min_x_vals)
                 if max_x is not None:
                     max_x_vals = [max_x, self.servo_x, int(self.x_center + self.x_bound/2)]
@@ -110,9 +110,15 @@ class Player:
                 # Y inverted
                 self.servo_y -= int(y_delta / self.y_range * self.manual_rate)
                 if min_y is not None:
-                    self.servo_y = min(min_y, self.servo_y)
+                    min_y_vals = [min_y, self.servo_y, int(self.y_center + self.y_bound/2)]
+                else:
+                    min_y_vals = [self.servo_y, int(self.y_center + self.y_bound / 2)]
+                self.servo_y = min(*min_y_vals)
                 if max_y is not None:
-                    self.servo_y = max(max_y, self.servo_y)
+                    max_y_vals = [max_y, self.servo_y, int(self.y_center - self.y_bound/2)]
+                else:
+                    max_y_vals = [self.servo_y, int(self.y_center - self.y_bound / 2)]
+                self.servo_y = max(*max_y_vals)
                 self.pwm.set_pwm(self.y_pin, 0, self.servo_y
                                                 + self.turret.y_cal
                                                 + self.y_offset)
