@@ -13,7 +13,8 @@ class Player:
                  x_offset: int=0, y_offset: int=0,
                  no_x: bool=False, no_y: bool=False,
                  fixed_x: int=0, fixed_y: int=0,
-                 initial_x: int=None, initial_y: int=None):
+                 initial_x: int=None, initial_y: int=None,
+                 x_center: int=None, y_center: int=None):
         self.x_bound = x_bound
         self.y_bound = y_bound
         self.controller = controller
@@ -44,6 +45,8 @@ class Player:
                 self.servo_y = initial_y
             else:
                 self.servo_y = -1
+        self.x_center = x_center
+        self.y_center = y_center
         """
         SNAP
         """
@@ -90,15 +93,22 @@ class Player:
             if fabs(x_delta) > 0.1 * self.x_range:
                 self.servo_x += int(x_delta / self.x_range * self.manual_rate)
                 if min_x is not None:
-                    self.servo_x = min(min_x, self.servo_x)
+                    min_x_vals = [min_x, self.servo_x, int(self.x_center - self.x_bound/2)]
+                else:
+                    min_x_vals = [self.servo_x, int(self.x_bound / 2 + self.x_center)]
+                self.servo_x = min(*min_x_vals)
                 if max_x is not None:
-                    self.servo_x = max(max_x, self.servo_x)
+                    max_x_vals = [max_x, self.servo_x, int(self.x_center + self.x_bound/2)]
+                else:
+                    max_x_vals = [self.servo_x, int(self.x_center + self.x_bound / 2)]
+                self.servo_x = max(*max_x_vals)
                 self.pwm.set_pwm(self.x_pin, 0, self.servo_x
                                                 + self.turret.x_cal
                                                 + self.x_offset)
         if not self.no_y:
             if fabs(y_delta) > 0.1 * self.y_range:
-                self.servo_y += int(y_delta / self.y_range * self.manual_rate)
+                # Y inverted
+                self.servo_y -= int(y_delta / self.y_range * self.manual_rate)
                 if min_y is not None:
                     self.servo_y = min(min_y, self.servo_y)
                 if max_y is not None:
