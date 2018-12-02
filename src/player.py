@@ -11,7 +11,10 @@ class Player:
                  controller: PlayerController,
                  x_offset: int=0, y_offset: int=0,
                  no_x: bool=False, no_y: bool=False,
-                 fixed_x: int=0, fixed_y: int=0):
+                 fixed_x: int=0, fixed_y: int=0,
+                 initial_x: int=None, initial_y: int=None):
+        self.x_bound = x_bound
+        self.y_bound = y_bound
         self.controller = controller
         self.turret = turret
         self.laser = LED(turret.laser_pin)
@@ -27,24 +30,38 @@ class Player:
             self.servo_x = fixed_x
             pwm.set_pwm(self.x_pin, 0, fixed_x + turret.x_cal)
         else:
-            self.servo_x = -1
+            if initial_x is not None:
+                self.servo_x = initial_x
+            else:
+                self.servo_x = -1
         self.fixed_y = fixed_y
         if fixed_y:
             self.servo_y = fixed_y
             pwm.set_pwm(self.x_pin, 0, fixed_y + turret.y_cal)
         else:
-            self.servo_y = -1
+            if initial_y is not None:
+                self.servo_y = initial_y
+            else:
+                self.servo_y = -1
+        """
+        SNAP
+        """
         # Calculate the values for y = mx + b
         # x needs to be swapped for our setup
-        self.xm = x_bound / (controller.x_min - controller.x_max)
-        self.ym = y_bound / (controller.y_max - controller.y_min)
+        self.xm = self.x_bound / (controller.x_min - controller.x_max)
+        self.ym = self.y_bound / (controller.y_max - controller.y_min)
         self.xb = turret.x_center - self.xm * controller.x_center
         self.yb = turret.y_center - self.ym * controller.y_center
+        """
+        MANUAL
+        """
+        self.x_range = controller.x_max - controller.x_center
+        self.y_range = controller.y_max - controller.y_center
+        self.manual_rate = 10
 
     def set_servo(self, min_x=None, max_x=None, min_y=None, max_y=None):
         x, y = self.controller.joystick()
         if not self.no_x:
-            
             self.servo_x = int(self.xm * x + self.xb)
             if min_x is not None:
                 self.servo_x = min(min_x, self.servo_x)
@@ -55,6 +72,30 @@ class Player:
                                             + self.x_offset)
         if not self.no_y:
             self.servo_y = int(self.ym * y + self.yb)
+            if min_y is not None:
+                self.servo_y = min(min_y, self.servo_y)
+            if max_y is not None:
+                self.servo_y = max(max_y, self.servo_y)
+            self.pwm.set_pwm(self.y_pin, 0, self.servo_y
+                                            + self.turret.y_cal
+                                            + self.y_offset)
+        return self.servo_x + self.x_offset, self.servo_y + self.y_offset
+
+    def manual_servo(self, min_x=None, max_x=None, min_y=None, max_y=None):
+        x, y = self.controller.joystick()
+        x_delta = self.controller.x_center - x
+        y_delta = self.controller.y_center - y
+        if not self.no_x:
+            self.servo_x += int(x_delta / self.x_range * self.manual_rate)
+            if min_x is not None:
+                self.servo_x = min(min_x, self.servo_x)
+            if max_x is not None:
+                self.servo_x = max(max_x, self.servo_x)
+            self.pwm.set_pwm(self.x_pin, 0, self.servo_x
+                                            + self.turret.x_cal
+                                            + self.x_offset)
+        if not self.no_y:
+            self.servo_y += int(y_delta / self.y_range * self.manual_rate)
             if min_y is not None:
                 self.servo_y = min(min_y, self.servo_y)
             if max_y is not None:
