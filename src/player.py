@@ -98,9 +98,9 @@ class Player:
                     min_x_vals = [self.servo_x, int(self.x_center + self.x_bound / 2)]
                 self.servo_x = min(*min_x_vals)
                 if max_x is not None:
-                    max_x_vals = [max_x, self.servo_x, int(self.x_center + self.x_bound/2)]
+                    max_x_vals = [max_x, self.servo_x, int(self.x_center - self.x_bound/2)]
                 else:
-                    max_x_vals = [self.servo_x, int(self.x_center + self.x_bound / 2)]
+                    max_x_vals = [self.servo_x, int(self.x_center - self.x_bound / 2)]
                 self.servo_x = max(*max_x_vals)
                 self.pwm.set_pwm(self.x_pin, 0, self.servo_x
                                                 + self.turret.x_cal
