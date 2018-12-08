@@ -39,6 +39,33 @@ class Wall:
                     binding_values['max_y'] = self.y_end
         return binding_values
 
+class MazeWalls:
+    def __init__(self, x_offset, y_offset):
+        self.x_offset = x_offset
+        self.y_offset = y_offset
+        self.walls = []
+
+    def add_wall(self, x_start, y_start, x_end=0, y_end=0):
+        if x_end:
+            x_end += self.x_offset
+        if y_end:
+            y_end += self.y_offset
+        new_wall = Wall(x_start + self.x_offset, y_start + self.x_offset,
+                        x_end, y_end)
+        self.walls.append(new_wall)
+
+    def check_collision(self, x, y):
+        binding = {}
+        for wall in self.walls:
+            binding.update(wall.has_collided(x, y))
+        return binding
+
+LINES = [Wall(355, 355, y_end=395), Wall(355, 395, x_end=395)]
+WALLS = MazeWalls(325, 325)
+WALLS.add_wall(y_start=0, y_end=75, x_start=15)
+WALLS.add_wall(y_start=25, y_end=100, x_start=45)
+WALLS.add_wall(y_start=0, y_end=75, x_start=75)
+
 
 class Maze(Game):
 
@@ -47,20 +74,13 @@ class Maze(Game):
                  player_turret: Turret,
                  ):
         super().__init__(center, bound, pwm)
-        self.player = Player(bound, bound, pwm, player_turret, controller)
+        self.player = Player(bound, bound, pwm, player_turret, controller,
+                             initial_x=365, initial_y=365)
         self.player.laser.on()
 
     def play_on(self):
         self.playing = True
         binding = {}
-        lines =[Wall(355, 355, y_end=395), Wall(355, 395, x_end=395)]
         while self.playing:
             x, y = self.player.set_servo(**binding)
-            binding = {}
-            for line in lines:
-                binding.update(line.has_collided(x, y))
-                # if collide:
-                #     if not restrict_x:
-                #         restrict_x = line.is_vertical
-                #     if not restrict_y:
-                #         restrict_y = line.is_horizontal
+            binding = WALLS.check_collision(x, y)
