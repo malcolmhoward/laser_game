@@ -62,9 +62,9 @@ class MazeWalls:
 
 LINES = [Wall(355, 355, y_end=395), Wall(355, 395, x_end=395)]
 WALLS = MazeWalls(325, 325)
-WALLS.add_wall(y_start=0, y_end=75, x_start=15)
-WALLS.add_wall(y_start=25, y_end=100, x_start=45)
-WALLS.add_wall(y_start=0, y_end=75, x_start=75)
+WALLS.add_wall(y_start=25, y_end=100, x_start=15)
+WALLS.add_wall(y_start=0, y_end=75, x_start=45)
+WALLS.add_wall(y_start=25, y_end=100, x_start=75)
 
 
 class Maze(Game):
@@ -75,7 +75,8 @@ class Maze(Game):
                  ):
         super().__init__(center, bound, pwm)
         self.player = Player(bound, bound, pwm, player_turret, controller,
-                             initial_x=365, initial_y=365)
+                             initial_x=415, initial_y=415,
+                             x_center=375, y_center=375)
         self.player.laser.on()
 
     def play_on(self):
