@@ -1,3 +1,5 @@
+from typing import Tuple
+from math import atan2, sqrt
 from src.WiiController.nunchuk import Nunchuk
 from src.WiiController.pro_controller import ProController
 from src.WiiController.classic_controller import ClassicController
@@ -13,8 +15,14 @@ class PlayerController:
         self.y_min = y_min
         self.y_max = y_max
 
-    def joystick(self):
+    def joystick(self) -> Tuple[int, int]:
         ...
+
+    def angle_and_radius(self) -> Tuple[float, float]:
+        x, y = self.joystick()
+        angle = atan2(y - self.y_center, x - self.x_center)
+        radius = sqrt((y - self.y_center) ** 2 + (x - self.x_center) ** 2)
+        return angle, radius
 
     def fire(self):
         ...
