@@ -34,6 +34,9 @@ class Player:
         else:
             if initial_x is not None:
                 self.servo_x = initial_x
+                self.pwm.set_pwm(self.x_pin, 0, self.servo_x
+                                                + self.turret.x_cal
+                                                + self.x_offset)
             else:
                 self.servo_x = -1
         self.fixed_y = fixed_y
@@ -43,6 +46,9 @@ class Player:
         else:
             if initial_y is not None:
                 self.servo_y = initial_y
+                self.pwm.set_pwm(self.y_pin, 0, self.servo_y
+                                                + self.turret.y_cal
+                                                + self.y_offset)
             else:
                 self.servo_y = -1
         self.x_center = x_center
