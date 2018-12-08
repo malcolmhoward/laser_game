@@ -82,5 +82,5 @@ class Maze(Game):
         self.playing = True
         binding = {}
         while self.playing:
-            x, y = self.player.set_servo(**binding)
+            x, y = self.player.manual_servo(**binding)
             binding = WALLS.check_collision(x, y)
