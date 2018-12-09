@@ -91,7 +91,7 @@ class Player:
                                             + self.y_offset)
         return self.servo_x + self.x_offset, self.servo_y + self.y_offset
 
-    def manual_servo(self, min_x=None, max_x=None, min_y=None, max_y=None):
+    def manual_servo(self, min_x=999, max_x=-999, min_y=999, max_y=-999):
         # FIXME: Since xy/values are higher at the cardinal directions,
         #   scrolling doesn't feel as snappy in the corners
         x, y = self.controller.joystick()
@@ -100,13 +100,9 @@ class Player:
         if not self.no_x:
             if fabs(x_delta) > 0.1 * self.x_range:
                 self.servo_x += int(x_delta / self.x_range * self.manual_rate)
-                min_x_vals = [self.servo_x, int(self.x_center + self.x_bound / 2)]
-                if min_x is not None:
-                    min_x_vals.append(min_x)
+                min_x_vals = [min_x, self.servo_x, int(self.x_center + self.x_bound / 2)]
                 self.servo_x = min(*min_x_vals)
-                max_x_vals = [self.servo_x, int(self.x_center - self.x_bound / 2)]
-                if max_x is not None:
-                    max_x_vals.append(max_x)
+                max_x_vals = [max_x, self.servo_x, int(self.x_center - self.x_bound / 2)]
                 self.servo_x = max(*max_x_vals)
                 self.pwm.set_pwm(self.x_pin, 0, self.servo_x
                                                 + self.turret.x_cal
@@ -115,13 +111,9 @@ class Player:
             if fabs(y_delta) > 0.1 * self.y_range:
                 # Y inverted
                 self.servo_y -= int(y_delta / self.y_range * self.manual_rate)
-                min_y_vals = [self.servo_y, int(self.y_center + self.y_bound / 2)]
-                if min_y is not None:
-                    min_y_vals.append(min_y)
+                min_y_vals = [min_y, self.servo_y, int(self.y_center + self.y_bound / 2)]
                 self.servo_y = min(*min_y_vals)
-                max_y_vals = [self.servo_y, int(self.y_center - self.y_bound / 2)]
-                if max_y is not None:
-                    max_y_vals.append(max_y)
+                max_y_vals = [max_y, self.servo_y, int(self.y_center - self.y_bound / 2)]
                 self.servo_y = max(*max_y_vals)
                 self.pwm.set_pwm(self.y_pin, 0, self.servo_y
                                                 + self.turret.y_cal
