@@ -74,6 +74,16 @@ class Player:
         self.manual_rate = 3
 
     def set_servo(self, min_x=999, max_x=-999, min_y=999, max_y=-999):
+        """
+        Servos follow exactly where the player sets the joystick.
+
+        Min/max values are purposely set far out to allow them to be passed in.
+        :param min_x:
+        :param max_x:
+        :param min_y:
+        :param max_y:
+        :return:
+        """
         x, y = self.controller.joystick()
         if not self.no_x:
             self.servo_x = int(self.xm * x + self.xb)
@@ -92,8 +102,18 @@ class Player:
         return self.servo_x + self.x_offset, self.servo_y + self.y_offset
 
     def manual_servo(self, min_x=999, max_x=-999, min_y=999, max_y=-999):
+        """
+        Servos stay where they are when the joysticks are not touched.
+
+        Min/max values are purposely set far out to allow them to be passed in.
+        :param min_x:
+        :param max_x:
+        :param min_y:
+        :param max_y:
+        :return:
+        """
         # FIXME: Since xy/values are higher at the cardinal directions,
-        #   scrolling doesn't feel as snappy in the corners
+        #   scrolling doesn't feel as snappy in the joystick corners
         x, y = self.controller.joystick()
         x_delta = self.controller.x_center - x
         y_delta = self.controller.y_center - y
