@@ -67,7 +67,7 @@ class Player:
         """
         self.x_range = controller.x_max - controller.x_center
         self.y_range = controller.y_max - controller.y_center
-        self.manual_rate = 2
+        self.manual_rate = 3
 
     def set_servo(self, min_x=None, max_x=None, min_y=None, max_y=None):
         x, y = self.controller.joystick()

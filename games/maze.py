@@ -7,7 +7,7 @@ from src.turret import Turret
 
 
 class Wall:
-    thickness = 4
+    thickness = 6
 
     def __init__(self, x_start, y_start, x_end=0, y_end=0):
         self.x_start = x_start
