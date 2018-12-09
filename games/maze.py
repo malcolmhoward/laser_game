@@ -1,3 +1,4 @@
+import time
 from .game import Game
 from src import Player
 from src.player_controller import PlayerController
@@ -82,6 +83,10 @@ class Maze(Game):
     def play_on(self):
         self.playing = True
         binding = {}
+        prev_time = 0
         while self.playing:
-            x, y = self.player.manual_servo(**binding)
-            binding = WALLS.check_collision(x, y)
+            curr_time = time.time()
+            if curr_time - prev_time >= self.time_rate:
+                prev_time = curr_time
+                x, y = self.player.manual_servo(**binding)
+                binding = WALLS.check_collision(x, y)
