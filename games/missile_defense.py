@@ -69,32 +69,38 @@ class MissileDefense(Game):
         self.life_counter = NPC(pwm, life_turret)
         self.life_pos = int(center + bound/2)
         # Put life counter out of bounds
-        self.life_counter.set_servo(int(center - bound/2) - 10, int(center + bound/2))
-        self.life_counter.laser.on()
-        self.life_distance = int(bound/self.lives)
+        if self.life_counter.laser is not None:
+            self.life_counter.set_servo(int(center - bound / 2) + 10, int(center + bound / 2))
+            self.life_counter.laser.on()
+        self.life_distance = int(bound / self.lives)
 
-    def play_on(self):
-        self.playing = True
-        hit = False
-        lose = False
-        prev_time = 0
-        player_score = 0
-        missile_rate = 1
-        missile = self.make_missile()
-        missile_respawn = False
-        respawn_time = time.time()
-        while self.playing:
-            if hit:
-                player_score += 1
-                missile_rate += self.rate_increase
-            if lose:
-                self.lives -= 1
-                self.life_pos -= self.life_distance
-                self.life_counter.set_servo(int(self.center - self.bound/2) - 10,
-                                            self.life_pos)
-            if hit or lose:
-                hit = False
-                lose = False
+    def init_game(self):
+        self.game_screen_title = 'Missle Defense Game'
+        super().init_game()
+        self.hit = False
+        self.lose = False
+        self.prev_time = 0
+        self.player_score = 0
+        self.missile_rate = 1
+        self.current_missile = self.make_missile()
+        self.missile_respawn = False
+        self.respawn_time = time.time()
+
+    def run_game_logic(self):
+        if self.hit:
+            self.player_score += 1
+            self.missile_rate += self.rate_increase
+        if self.lose:
+            self.lives -= 1
+            self.life_pos -= self.life_distance
+            if self.life_counter.laser is not None:
+                self.life_counter.set_servo(int(self.center - self.bound / 2) + 10, self.life_pos)
+        if self.hit or self.lose:
+            self.hit = False
+            self.lose = False
+            # Checking self.player.laser instead of self.missile.laser because the latter throws
+            # AttributeError: 'generator' object has no attribute 'laser'
+            if self.player.laser is not None:
                 self.missile.laser.off()
             self.current_missile = self.make_missile(self.missile_rate)
             self.missile_respawn = True

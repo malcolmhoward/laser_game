@@ -14,6 +14,7 @@ class Game:
         self.game_screen_title = 'Game Title'
         self.laser_radius = 1
         self.wall_width = 5
+        self.x, self.y = 0, 0
 
     def play_on(self):
         self.playing = True

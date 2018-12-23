@@ -1,5 +1,13 @@
 from math import fabs
-from gpiozero import LED
+try:
+    from gpiozero import LED
+except Exception as e:
+    if e.__class__.__name__ == "BadPinFactory":
+        print("gpiozero.exc.BadPinFactory: Unable to load any default pin factory!")
+        print("Setting LED to None..")
+        LED = None
+    else:
+        raise(e)
 from .turret import Turret
 
 from .player_controller import PlayerController
@@ -18,6 +26,9 @@ class Player:
                  x_center: int=375, y_center: int=375):
         self.x_bound = x_bound
         self.y_bound = y_bound
+        if controller is None:
+            print('controller was none, so use PlayerController instead')
+            controller = PlayerController(x_center=400, y_center=300, x_min=0, x_max=800, y_min=0, y_max=600)
         self.controller = controller
         self.turret = turret
         self.laser = None
@@ -37,11 +48,9 @@ class Player:
             if turret is not None:
                 pwm.set_pwm(self.x_pin, 0, fixed_x + turret.x_cal)
         else:
-            if initial_x is not None:
+            if initial_x is not None and self.pwm is not None:
                 self.servo_x = initial_x
-                self.pwm.set_pwm(self.x_pin, 0, self.servo_x
-                                                + self.turret.x_cal
-                                                + self.x_offset)
+                self.pwm.set_pwm(self.x_pin, 0, self.servo_x + self.turret.x_cal + self.x_offset)
             else:
                 self.servo_x = -1
         self.fixed_y = fixed_y
@@ -50,11 +59,9 @@ class Player:
             if turret is not None:
                 pwm.set_pwm(self.x_pin, 0, fixed_y + turret.y_cal)
         else:
-            if initial_y is not None:
+            if initial_y is not None and self.pwm is not None:
                 self.servo_y = initial_y
-                self.pwm.set_pwm(self.y_pin, 0, self.servo_y
-                                                + self.turret.y_cal
-                                                + self.y_offset)
+                self.pwm.set_pwm(self.y_pin, 0, self.servo_y + self.turret.y_cal + self.y_offset)
             else:
                 self.servo_y = -1
         self.x_center = x_center
@@ -68,10 +75,13 @@ class Player:
         """
         # Calculate the values for y = mx + b
         # x needs to be swapped for our setup
-        self.xm = self.x_bound / (controller.x_min - controller.x_max)
-        self.ym = self.y_bound / (controller.y_max - controller.y_min)
-        self.xb = turret.x_center - self.xm * controller.x_center
-        self.yb = turret.y_center - self.ym * controller.y_center
+        self.xm = self.x_bound / (self.controller.x_min - self.controller.x_max)
+        self.ym = self.y_bound / (self.controller.y_max - self.controller.y_min)
+        self.xb = self.xm * self.controller.x_center
+        self.yb = self.ym * self.controller.y_center
+        if turret is not None:
+            self.xb = turret.x_center - self.xm * self.controller.x_center
+            self.yb = turret.y_center - self.ym * self.controller.y_center
         """
         MANUAL
         """
@@ -95,16 +105,12 @@ class Player:
             self.servo_x = int(self.xm * x + self.xb)
             self.servo_x = min(min_x, self.servo_x)
             self.servo_x = max(max_x, self.servo_x)
-            self.pwm.set_pwm(self.x_pin, 0, self.servo_x
-                                            + self.turret.x_cal
-                                            + self.x_offset)
+            self.pwm.set_pwm(self.x_pin, 0, self.servo_x + self.turret.x_cal + self.x_offset)
         if not self.no_y:
             self.servo_y = int(self.ym * y + self.yb)
             self.servo_y = min(min_y, self.servo_y)
             self.servo_y = max(max_y, self.servo_y)
-            self.pwm.set_pwm(self.y_pin, 0, self.servo_y
-                                            + self.turret.y_cal
-                                            + self.y_offset)
+            self.pwm.set_pwm(self.y_pin, 0, self.servo_y + self.turret.y_cal + self.y_offset)
         return self.servo_x + self.x_offset, self.servo_y + self.y_offset
 
     def manual_servo(self, min_x=999, max_x=-999, min_y=999, max_y=-999):
@@ -128,18 +134,14 @@ class Player:
                 self.servo_x += int(x_delta / self.x_range * self.manual_rate)
                 self.servo_x = min(min_x, self.servo_x, self.x_min)
                 self.servo_x = max(max_x, self.servo_x, self.x_max)
-                self.pwm.set_pwm(self.x_pin, 0, self.servo_x
-                                                + self.turret.x_cal
-                                                + self.x_offset)
+                self.pwm.set_pwm(self.x_pin, 0, self.servo_x + self.turret.x_cal + self.x_offset)
         if not self.no_y:
             if fabs(y_delta) > 0.1 * self.y_range:
                 # Y inverted
                 self.servo_y -= int(y_delta / self.y_range * self.manual_rate)
                 self.servo_y = min(min_y, self.servo_y, self.y_min)
                 self.servo_y = max(max_y, self.servo_y, self.y_max)
-                self.pwm.set_pwm(self.y_pin, 0, self.servo_y
-                                                + self.turret.y_cal
-                                                + self.y_offset)
+                self.pwm.set_pwm(self.y_pin, 0, self.servo_y + self.turret.y_cal + self.y_offset)
         return self.servo_x + self.x_offset, self.servo_y + self.y_offset
 
     def get_position(self):

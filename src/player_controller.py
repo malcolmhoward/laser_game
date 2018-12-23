@@ -1,8 +1,5 @@
 from typing import Tuple
 from math import atan2, sqrt
-from src.WiiController.nunchuk import Nunchuk
-from src.WiiController.pro_controller import ProController
-from src.WiiController.classic_controller import ClassicController
 
 
 class PlayerController:

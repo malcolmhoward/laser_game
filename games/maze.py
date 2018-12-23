@@ -99,18 +99,47 @@ class Maze(Game):
 
     def __init__(self, center, bound, pwm, controller: PlayerController, player_turret: Turret):
         super().__init__(center, bound, pwm)
-        self.player = Player(bound, bound, pwm, player_turret, controller,
-                             initial_x=415, initial_y=415,
-                             x_center=375, y_center=375)
-        self.player.laser.on()
+        self.player = Player(bound, bound, pwm, player_turret, controller, initial_x=415, initial_y=415, x_center=375, y_center=375)
+        if self.player.laser is not None:
+            self.player.laser.on()
 
-    def play_on(self):
-        self.playing = True
-        binding = {}
-        prev_time = 0
-        while self.playing:
+    def init_game(self):
+        self.game_screen_title = 'Maze Game'
+        super().init_game()
+        self.lines = [Wall(355, 355, y_end=395), Wall(355, 395, x_end=395)]
+        self.x, self.y = 0, 0
+        self.binding = {}
+        self.prev_time = 0
+
+    def run_game_logic(self):
+        restrict_x = False
+        restrict_y = False
+        if self.use_gui:
+            # TODO: Capture the X and Y coordinates from the keyboard/game
+            # self.x, self.y = 0, 0
+            pass
+        else:
+            self.x, self.y = self.player.set_servo(restrict_x, restrict_y)
             curr_time = time.time()
-            if curr_time - prev_time >= self.time_rate:
-                prev_time = curr_time
-                x, y = self.player.manual_servo(**binding)
-                binding = WALLS.check_collision(x, y)
+            if curr_time - self.prev_time >= self.time_rate:
+                self.prev_time = curr_time
+                self.x, self.y = self.player.manual_servo(**self.binding)
+                self.binding = WALLS.check_collision(self.x, self.y)
+        for line in self.lines:
+            collision = line.has_collided(self.x, self.y)
+            print("collision", collision)
+            if collision:
+                if not restrict_x:
+                    restrict_x = line.is_vertical
+                if not restrict_y:
+                    restrict_y = line.is_horizontal
+                print("restrict_x", restrict_x)
+                print("restrict_y", restrict_y)
+
+    def draw_walls(self):
+        for line in self.lines:
+            self.draw_wall((line.x_start, line.y_start), (line.x_end, line.y_end), line.thickness)
+
+    def run_gui_logic(self):
+        self.draw_laser(self.x, self.y)
+        self.draw_walls()
