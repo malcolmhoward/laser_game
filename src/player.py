@@ -105,12 +105,14 @@ class Player:
             self.servo_x = int(self.xm * x + self.xb)
             self.servo_x = min(min_x, self.servo_x)
             self.servo_x = max(max_x, self.servo_x)
-            self.pwm.set_pwm(self.x_pin, 0, self.servo_x + self.turret.x_cal + self.x_offset)
+            if self.pwm is not None:
+                self.pwm.set_pwm(self.x_pin, 0, self.servo_x + self.turret.x_cal + self.x_offset)
         if not self.no_y:
             self.servo_y = int(self.ym * y + self.yb)
             self.servo_y = min(min_y, self.servo_y)
             self.servo_y = max(max_y, self.servo_y)
-            self.pwm.set_pwm(self.y_pin, 0, self.servo_y + self.turret.y_cal + self.y_offset)
+            if self.pwm is not None:
+                self.pwm.set_pwm(self.y_pin, 0, self.servo_y + self.turret.y_cal + self.y_offset)
         return self.servo_x + self.x_offset, self.servo_y + self.y_offset
 
     def manual_servo(self, min_x=999, max_x=-999, min_y=999, max_y=-999):
@@ -126,22 +128,26 @@ class Player:
         """
         # FIXME: Since xy/values are higher at the cardinal directions,
         #   scrolling doesn't feel as snappy in the joystick corners
-        x, y = self.controller.joystick()
-        x_delta = self.controller.x_center - x
-        y_delta = self.controller.y_center - y
+        x, y, x_delta, y_delta = 0, 0, 0, 0
+        if self.controller is not None:
+            x, y = self.controller.joystick()
+            x_delta = self.controller.x_center - x
+            y_delta = self.controller.y_center - y
         if not self.no_x:
             if fabs(x_delta) > 0.1 * self.x_range:
                 self.servo_x += int(x_delta / self.x_range * self.manual_rate)
                 self.servo_x = min(min_x, self.servo_x, self.x_min)
                 self.servo_x = max(max_x, self.servo_x, self.x_max)
-                self.pwm.set_pwm(self.x_pin, 0, self.servo_x + self.turret.x_cal + self.x_offset)
+                if self.pwm is not None:
+                    self.pwm.set_pwm(self.x_pin, 0, self.servo_x + self.turret.x_cal + self.x_offset)
         if not self.no_y:
             if fabs(y_delta) > 0.1 * self.y_range:
                 # Y inverted
                 self.servo_y -= int(y_delta / self.y_range * self.manual_rate)
                 self.servo_y = min(min_y, self.servo_y, self.y_min)
                 self.servo_y = max(max_y, self.servo_y, self.y_max)
-                self.pwm.set_pwm(self.y_pin, 0, self.servo_y + self.turret.y_cal + self.y_offset)
+                if self.pwm is not None:
+                    self.pwm.set_pwm(self.y_pin, 0, self.servo_y + self.turret.y_cal + self.y_offset)
         return self.servo_x + self.x_offset, self.servo_y + self.y_offset
 
     def get_position(self):

@@ -13,7 +13,7 @@ class PlayerController:
         self.y_max = y_max
 
     def joystick(self) -> Tuple[int, int]:
-        ...
+        return 0, 0
 
     def angle_and_radius(self) -> Tuple[float, float]:
         x, y = self.joystick()
