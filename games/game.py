@@ -3,7 +3,7 @@ from pygame.locals import QUIT
 
 
 class Game:
-    def __init__(self, center, bound, pwm,):
+    def __init__(self, center, bound, pwm, gui_enabled=False):
         self.bound = bound
         self.center = center
         self.pwm = pwm
@@ -15,13 +15,14 @@ class Game:
         self.laser_radius = 1
         self.wall_width = 5
         self.x, self.y = 0, 0
+        self.gui_enabled = gui_enabled
 
     def play_on(self):
         self.playing = True
         self.init_game()
         while self.playing:
             self.run_game_logic()
-            if self.use_gui:
+            if self.gui_enabled:
                 for event in pygame.event.get():
                     if event.type == QUIT:
                         self.playing = False
@@ -64,8 +65,7 @@ class Game:
         # This is an override for games that are multiplayer, where self.player does not exist, i.e. self.player_1
         if player:
             self.player = player
-        self.use_gui = self.player.laser is None
-        if self.use_gui:
+        if self.gui_enabled:
             self.init_gui()
 
     def init_gui(self):

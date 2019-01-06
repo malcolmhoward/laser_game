@@ -49,8 +49,9 @@ class MissileDefense(Game):
                  controller: PlayerController,
                  player_turret: Turret,
                  missile_turret: Turret,
-                 life_turret: Turret):
-        super().__init__(center, bound, pwm)
+                 life_turret: Turret,
+                 gui_enabled=False):
+        super().__init__(center, bound, pwm, gui_enabled=gui_enabled)
         '''
         INIT PLAYER
         '''

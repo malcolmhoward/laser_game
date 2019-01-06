@@ -97,8 +97,8 @@ WALLS.add_wall(y_start=0,  y_end=16,   x_start=16)  # 18
 
 class Maze(Game):
 
-    def __init__(self, center, bound, pwm, controller: PlayerController, player_turret: Turret):
-        super().__init__(center, bound, pwm)
+    def __init__(self, center, bound, pwm, controller: PlayerController, player_turret: Turret, gui_enabled=False):
+        super().__init__(center, bound, pwm, gui_enabled=gui_enabled)
         self.player = Player(bound, bound, pwm, player_turret, controller, initial_x=415, initial_y=415, x_center=375, y_center=375)
         if self.player.laser is not None:
             self.player.laser.on()
@@ -114,7 +114,7 @@ class Maze(Game):
     def run_game_logic(self):
         restrict_x = False
         restrict_y = False
-        if self.use_gui:
+        if self.gui_enabled:
             # TODO: Capture the X and Y coordinates from the keyboard/game
             # self.x, self.y = 0, 0
             pass
