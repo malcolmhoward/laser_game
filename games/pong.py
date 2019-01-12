@@ -45,13 +45,21 @@ class Pong(Game):
         self.ball.laser.on()
         self.player_1.laser.on()
         self.player_2.laser.on()
+        # vertical_hit = False
+        # horizontal_hit = False
         while self.playing:
             ball = self.make_ball(self.ball_rate)
             prev_time = 0
-            xs, ys = ball.send((False, False))
+            # xs, ys = ball.send((horizontal_hit, vertical_hit))
             while self.playing:
                 self.curr_time = time.time()
                 if self.curr_time - prev_time >= self.time_rate:
+                    if not self.resetting:
+                        # xs, ys = ball.send((horizontal_hit, vertical_hit))
+                        xs, ys = ball.__next__()
+                    else:
+                        xs = self.center
+                        ys = self.center
                     prev_time = self.curr_time
                     x_1, y_1 = self.player_1.set_servo()
                     x_2, y_2 = self.player_2.set_servo()
@@ -75,19 +83,21 @@ class Pong(Game):
                         bottom_hit = ys <= (self.center - self.bound/2)
                         # Player hit
                         if (y_1_hit and x_1_hit) or (y_2_hit and x_2_hit):
-                            vertical_hit = True
-                            horizontal_hit = False
+                            # vertical_hit = True
+                            ball.vertical_hit()
+                            # horizontal_hit = False
                             self.bounce.rate += 0.1
                         # Top or bottom wall hit
                         elif top_hit or bottom_hit:
-                            vertical_hit = False
-                            horizontal_hit = True
-                        else:
-                            vertical_hit = False
-                            horizontal_hit = False
-                        if not self.resetting:
-                            xs, ys = ball.send((horizontal_hit,
-                                                vertical_hit))
+                            # vertical_hit = False
+                            # horizontal_hit = True
+                            ball.horizontal_hit()
+                        # else:
+                        #     vertical_hit = False
+                        #     horizontal_hit = False
+                        # if not self.resetting:
+                        #     xs, ys = ball.send((horizontal_hit,
+                        #                         vertical_hit))
                     self.handle_ball_resetting()
 
     def handle_ball_resetting(self):

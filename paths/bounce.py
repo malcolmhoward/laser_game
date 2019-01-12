@@ -12,7 +12,7 @@ class Bounce(Path):
         self.x_rate = rate * cos(self._angle)
         self.y_rate = rate * sin(self._angle)
 
-    def data(self) -> Generator[Tuple[int, int], Tuple[bool, bool], None]:
+    def old_data(self) -> Generator[Tuple[int, int], Tuple[bool, bool], None]:
         """
         Coroutine to advance an object at a certain rate until colliding with a wall.
 
@@ -36,8 +36,36 @@ class Bounce(Path):
             if vertical_hit:
                 self.x_rate *= -1
 
+    def data(self) -> Generator[Tuple[int, int], None, None]:
+        """
+        Coroutine to advance an object at a certain rate until colliding with a wall.
+
+        Call __next__() to initialize and get back the starting position
+        Call send((horizontal_hit, vertical_hit)) to keep getting data
+        There is no closing condition, so .close() exits
+        :return:
+        """
+        x = self.x_start
+        y = self.y_start
+        yield x, y
+        while True:
+            x += self.x_rate
+            y += self.y_rate
+            yield int(x), int(y)
+
+    def horizontal_hit(self):
+        self.y_rate *= 1
+
+    def vertical_hit(self):
+        self.x_rate *= 1
+
     @Path.rate.setter
     def rate(self, rate):
+        """
+        Change the base rate. X and Y rate are calculated accordingly
+        :param rate:
+        :return:
+        """
         # Get the sign of the rates before calculating
         x_sign = copysign(1, self.x_rate)
         y_sign = copysign(1, self.y_rate)
@@ -52,10 +80,16 @@ class Bounce(Path):
 
     @angle.setter
     def angle(self, angle):
+        """
+        Change the angle. X and Y rate are calculated accordingly
+        :param angle:
+        :return:
+        """
         # Get the sign of the rates before calculating
         x_sign = copysign(1, self.x_rate)
         y_sign = copysign(1, self.y_rate)
         self._angle = angle
+        # FIXME: What if the angle is outside the quadrant? May need to remove sign part
         # Multiply by the original sign to retain direction
         self.x_rate = x_sign * fabs(self._rate * cos(self._angle))
         self.y_rate = y_sign * fabs(self._rate * sin(self._angle))
