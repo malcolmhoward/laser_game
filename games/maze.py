@@ -5,7 +5,6 @@ from src.player_controller import PlayerController
 from src.turret import Turret
 
 
-
 class Wall:
     thickness = 6
 
@@ -40,6 +39,7 @@ class Wall:
                     binding_values['max_y'] = self.y_end
         return binding_values
 
+
 class MazeWalls:
     def __init__(self, x_offset, y_offset):
         self.x_offset = x_offset
@@ -61,11 +61,37 @@ class MazeWalls:
             binding.update(wall.has_collided(x, y))
         return binding
 
-LINES = [Wall(355, 355, y_end=395), Wall(355, 395, x_end=395)]
+# 100 divided into 6 with padding
+# 16
+# 33
+# 49
+# 66
+# 82
+# 100
+
+
 WALLS = MazeWalls(325, 325)
-WALLS.add_wall(y_start=25, y_end=100, x_start=15)
-WALLS.add_wall(y_start=0, y_end=75, x_start=45)
-WALLS.add_wall(y_start=25, y_end=100, x_start=75)
+# Left most third
+WALLS.add_wall(y_start=0,  y_end=16,   x_start=16)  # 1
+WALLS.add_wall(y_start=0,  x_start=0,  x_end=16)    # 2
+WALLS.add_wall(y_start=0,  y_end=16,   x_start=33)  # 3
+WALLS.add_wall(y_start=33, y_end=82,   x_start=33)  # 4
+WALLS.add_wall(y_start=49, x_start=16, x_end=33)    # 5
+WALLS.add_wall(y_start=66, x_start=16, x_end=33)    # 6
+WALLS.add_wall(y_start=82, y_end=100,  x_start=16)  # 7
+# Middle third
+WALLS.add_wall(y_start=0, y_end=16, x_start=16)  # 8
+WALLS.add_wall(y_start=0, y_end=16, x_start=16)  # 9
+WALLS.add_wall(y_start=0, y_end=16, x_start=16)  # 10
+WALLS.add_wall(y_start=0, y_end=16, x_start=16)  # 11
+WALLS.add_wall(y_start=0, y_end=16, x_start=16)  # 12
+WALLS.add_wall(y_start=0, y_end=16, x_start=16)  # 13
+# Right most third
+WALLS.add_wall(y_start=0, y_end=16, x_start=16)  # 14
+WALLS.add_wall(y_start=0, y_end=16, x_start=16)  # 15
+WALLS.add_wall(y_start=0, y_end=16, x_start=16)  # 16
+WALLS.add_wall(y_start=0, y_end=16, x_start=16)  # 17
+WALLS.add_wall(y_start=0, y_end=16, x_start=16)  # 18
 
 
 class Maze(Game):
