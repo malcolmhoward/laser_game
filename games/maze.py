@@ -88,11 +88,11 @@ WALLS.add_wall(y_start=16, y_end=82,   x_start=33)  # 11
 WALLS.add_wall(y_start=49, x_start=33, x_end=49)    # 12
 WALLS.add_wall(y_start=0,  y_end=33,   x_start=49)  # 13
 # Right most third
-# WALLS.add_wall(y_start=16, y_end=49,   x_start=82)  # 14
-# WALLS.add_wall(y_start=48, x_start=82, x_end=100)   # 15
-# WALLS.add_wall(y_start=66, x_start=82, x_end=100)   # 16
-# WALLS.add_wall(y_start=82, x_start=66, x_end=82)    # 17
-# WALLS.add_wall(y_start=82, y_end=100,  x_start=82)  # 18
+WALLS.add_wall(y_start=49, y_end=82,   x_start=16)  # 14
+WALLS.add_wall(y_start=49, x_start=0,  x_end=16)    # 15
+WALLS.add_wall(y_start=33, x_start=0,  x_end=16)    # 16
+WALLS.add_wall(y_start=16, x_start=16, x_end=33)    # 17
+WALLS.add_wall(y_start=0,  y_end=16,   x_start=16)  # 18
 
 
 class Maze(Game):
