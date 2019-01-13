@@ -76,17 +76,17 @@ WALLS = MazeWalls(325, 325)
 WALLS.add_wall(y_start=82, y_end=100,  x_start=82)  # 1
 WALLS.add_wall(y_start=66, x_start=82, x_end=100)   # 2
 WALLS.add_wall(y_start=82, y_end=100,  x_start=66)  # 3
-WALLS.add_wall(y_start=82, y_end=33,   x_start=66)  # 4
+WALLS.add_wall(y_start=16, y_end=66,   x_start=66)  # 4
 WALLS.add_wall(y_start=49, x_start=66, x_end=82)    # 5
 WALLS.add_wall(y_start=33, x_start=66, x_end=82)    # 6
 WALLS.add_wall(y_start=0,  y_end=16,   x_start=82)  # 7
 # Middle third
-# WALLS.add_wall(y_start=16, x_start=33, x_end=49)    # 8
-# WALLS.add_wall(y_start=16, y_end=33,   x_start=49)  # 9
-# WALLS.add_wall(y_start=33, x_start=33, x_end=49)    # 10
-# WALLS.add_wall(y_start=16, y_end=82,   x_start=66)  # 11
-# WALLS.add_wall(y_start=49, x_start=49, x_end=66)    # 12
-# WALLS.add_wall(y_start=66, y_end=100,  x_start=49)  # 13
+WALLS.add_wall(y_start=82, x_start=49, x_end=66)    # 8
+WALLS.add_wall(y_start=66, y_end=82,   x_start=49)  # 9
+WALLS.add_wall(y_start=66, x_start=49, x_end=66)    # 10
+WALLS.add_wall(y_start=16, y_end=82,   x_start=33)  # 11
+WALLS.add_wall(y_start=49, x_start=33, x_end=49)    # 12
+WALLS.add_wall(y_start=0,  y_end=33,   x_start=49)  # 13
 # Right most third
 # WALLS.add_wall(y_start=16, y_end=49,   x_start=82)  # 14
 # WALLS.add_wall(y_start=48, x_start=82, x_end=100)   # 15
