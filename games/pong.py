@@ -84,14 +84,14 @@ class Pong(Game):
                         # Player hit
                         if (y_1_hit and x_1_hit) or (y_2_hit and x_2_hit):
                             # vertical_hit = True
-                            ball.vertical_hit()
+                            self.bounce.vertical_hit()
                             # horizontal_hit = False
                             self.bounce.rate += 0.1
                         # Top or bottom wall hit
                         elif top_hit or bottom_hit:
                             # vertical_hit = False
                             # horizontal_hit = True
-                            ball.horizontal_hit()
+                            self.bounce.horizontal_hit()
                         # else:
                         #     vertical_hit = False
                         #     horizontal_hit = False
