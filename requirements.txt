@@ -1,6 +1,11 @@
+Adafruit-GPIO==1.0.3
+Adafruit-PCA9685==1.0.1
+Adafruit-PureIO==0.2.3
 cachetools==3.0.0
 gpiozero==1.4.1
 numpy==1.15.4
+pygame==1.9.4
 RPi.GPIO==0.6.5
 scipy==1.1.0
 smbus2==0.2.1
+spidev==3.2
