@@ -54,10 +54,10 @@ class Bounce(Path):
             yield int(x), int(y)
 
     def horizontal_hit(self):
-        self.y_rate *= 1
+        self.y_rate *= -1
 
     def vertical_hit(self):
-        self.x_rate *= 1
+        self.x_rate *= -1
 
     @Path.rate.setter
     def rate(self, rate):
