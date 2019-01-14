@@ -37,20 +37,21 @@ class Pong(Game):
                                no_x=True, fixed_x=int(center - bound/2))
         self.ball = NPC(pwm, npc_turret)
         self.bounce = None
+        self.current_ball = self.make_ball(self.ball_rate)
+        self.prev_time = 0
 
     def init_game(self):
         self.game_screen_title = 'Pong Game'
         super().init_game(player=self.player_1)
         self.player_1_points = 0
         self.player_2_points = 0
+        self.current_ball = self.make_ball(self.ball_rate)
         if self.ball.laser is not None:
             self.ball.laser.on()
             self.player_1.laser.on()
             self.player_2.laser.on()
 
     def run_game_logic(self):
-        self.current_ball = self.make_ball(self.ball_rate)
-        self.prev_time = 0
         xs, ys = self.current_ball.send((False, False))
         # TODO: Recondiser this while loop, unless self.make_ball() or self.ball.send() can set self.playing to False
         # while self.playing:
@@ -72,13 +73,11 @@ class Pong(Game):
                 self.player_2_points += 1
                 self.resetting = True
                 self.reset_time = time.time()
-                self.playing = False
             elif not yp_2_hit and xp_2_hit:
                 print('Player 2 loses!')
                 self.player_1_points += 1
                 self.resetting = True
                 self.reset_time = time.time()
-                self.playing = False
             else:
                 top_hit = ys >= (self.center + self.bound/2)
                 bottom_hit = ys <= (self.center - self.bound/2)
@@ -121,6 +120,7 @@ class Pong(Game):
             else:
                 self.skip_frame = False
             if self.curr_time - self.reset_time > self.reset_rate:
+                self.current_ball = self.make_ball(self.ball_rate)
                 self.resetting = False
                 self.ball.laser.on()
 
