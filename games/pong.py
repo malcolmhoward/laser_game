@@ -27,7 +27,7 @@ class Pong(Game):
     reset_rate = 1
 
     def __init__(self, center, bound, pwm, player_1_controller, player_2_controller,
-                 player_1_turret, player_2_turret, npc_turret, gui_enabled:False):
+                 player_1_turret, player_2_turret, npc_turret, gui_enabled=False):
         super().__init__(center, bound, pwm, gui_enabled=gui_enabled)
         self.player_1 = Player(bound, bound, pwm,
                                player_1_turret, player_1_controller,
