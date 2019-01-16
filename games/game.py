@@ -32,24 +32,26 @@ class Game:
                 # Be sure to cast to int as needed when it's time to draw
                 x1change, y1change, x2change, y2change = 0.0, 0.0, 0.0, 0.0
                 movement_distance = .1
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_LEFT:
-                        x1change = -movement_distance
-                    elif event.key == pygame.K_RIGHT:
-                        x1change = movement_distance
-                    if event.key == pygame.K_a:
-                        x2change = -movement_distance
-                    elif event.key == pygame.K_d:
-                        x2change = movement_distance
+                # call pygame.key.get_pressed() to check all currently/simultaneously pressed keys
+                pressed_keys = pygame.key.get_pressed()
+                if pressed_keys[pygame.K_LEFT]:
+                    x1change = -movement_distance
+                elif pressed_keys[pygame.K_RIGHT]:
+                    x1change = movement_distance
+                if pressed_keys[pygame.K_a]:
+                    x2change = -movement_distance
+                elif pressed_keys[pygame.K_d]:
+                    x2change = movement_distance
 
-                    if event.key == pygame.K_UP:
-                        y1change = -movement_distance
-                    elif event.key == pygame.K_DOWN:
-                        y1change = movement_distance
-                    if event.key == pygame.K_w:
-                        y2change = -movement_distance
-                    elif event.key == pygame.K_s:
-                        y2change = movement_distance
+                if pressed_keys[pygame.K_UP]:
+                    y1change = -movement_distance
+                elif pressed_keys[pygame.K_DOWN]:
+                    y1change = movement_distance
+                if pressed_keys[pygame.K_w]:
+                    y2change = -movement_distance
+                elif pressed_keys[pygame.K_s]:
+                    y2change = movement_distance
+
                 print('x1change', x1change)
                 print('y1change', y1change)
                 print('x2change', x2change)
