@@ -1,8 +1,13 @@
 from cachetools import TTLCache, cached
 from smbus2 import SMBus
-import RPi.GPIO as rpi
 import time as time
 
+try:
+    import RPi.GPIO as rpi
+except RuntimeError as e:
+    print("RuntimeError: This module can only be run on a Raspberry Pi!")
+except ImportError as e:
+    print("ImportError: This module can only be run on Linux!")
 
 class WiiController:
 
