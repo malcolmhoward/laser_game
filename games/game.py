@@ -14,7 +14,7 @@ class Game:
         self.game_screen_title = 'Game Title'
         self.laser_radius = 1
         self.wall_width = 5
-        self.x, self.y = 0, 0
+        self.x1, self.y1, self.x2, self.y2 = 0, 0, 0, 0
         self.gui_enabled = gui_enabled
 
     def play_on(self):
@@ -30,24 +30,38 @@ class Game:
                 # Capture keyboard arrow input to update location of player-controlled game objects
                 # We're using floats here instead of int to allow for more precise changes
                 # Be sure to cast to int as needed when it's time to draw
-                xchange, ychange = 0.0, 0.0
+                x1change, y1change, x2change, y2change = 0.0, 0.0, 0.0, 0.0
                 movement_distance = .1
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
-                        xchange = -movement_distance
+                        x1change = -movement_distance
                     elif event.key == pygame.K_RIGHT:
-                        xchange = movement_distance
+                        x1change = movement_distance
+                    if event.key == pygame.K_a:
+                        x2change = -movement_distance
+                    elif event.key == pygame.K_d:
+                        x2change = movement_distance
 
                     if event.key == pygame.K_UP:
-                        ychange = -movement_distance
+                        y1change = -movement_distance
                     elif event.key == pygame.K_DOWN:
-                        ychange = movement_distance
-                print('xchange', xchange)
-                print('ychange', ychange)
-                self.x += xchange
-                self.y += ychange
-                print ('self.x', self.x)
-                print ('self.y', self.y)
+                        y1change = movement_distance
+                    if event.key == pygame.K_w:
+                        y2change = -movement_distance
+                    elif event.key == pygame.K_s:
+                        y2change = movement_distance
+                print('x1change', x1change)
+                print('y1change', y1change)
+                print('x2change', x2change)
+                print('y2change', y2change)
+                self.x1 += x1change
+                self.y1 += y1change
+                self.x2 += x2change
+                self.y2 += y2change
+                print ('self.x1', self.x1)
+                print ('self.y1', self.y1)
+                print('self.x2', self.x2)
+                print('self.y2', self.y2)
                 self.game_window.fill(self.color_palette.get('white'))
                 self.run_gui_logic()
                 pygame.display.update()
@@ -59,7 +73,8 @@ class Game:
         ...
 
     def run_gui_logic(self):
-        self.draw_laser(self.x, self.y)
+        self.draw_laser(self.x1, self.y1)
+        self.draw_laser(self.x2, self.y2)
 
     def init_game(self, player=None):
         # This is an override for games that are multiplayer, where self.player does not exist, i.e. self.player_1
