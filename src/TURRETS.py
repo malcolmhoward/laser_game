@@ -13,4 +13,4 @@ TURRET_3 = Turret(4, 5, 18, 375, 375, x_cal=cal['turret3']['x'],
 TURRET_4 = Turret(6, 7, 27, 375, 375, x_cal=cal['turret4']['x'],
                                      y_cal=cal['turret4']['y'])
 TURRET_5 = Turret(8, 9, 22, 375, 375, x_cal=cal['turret5']['x'],
-                                     y_cal=cal['turret6']['y'])
+                                     y_cal=cal['turret5']['y'])
